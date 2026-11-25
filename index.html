@@ -123,7 +123,7 @@ details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px
         <span class="num big" id="doneCount">0</span>
         <span class="num" style="font-size:18px;font-weight:700;opacity:.9">/ 3 項</span>
       </div>
-      <span style="font-size:12px;opacity:.92">台北時間每週一重新開始</span>
+      <a href="#plan" id="planLine" style="font-size:12px;color:#fff;opacity:.95;text-decoration:underline;text-underline-offset:3px">8 週計畫</a>
     </div>
     <svg viewBox="0 0 120 120" width="112" height="112" role="img" aria-label="微笑蕃薯">
       <g transform="rotate(12 60 62)">
@@ -143,6 +143,11 @@ details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px
   <div id="cards" style="display:flex;flex-direction:column;gap:14px"></div>
 
   <nav class="shortcuts" aria-label="捷徑">
+    <a class="sc" href="#plan" style="background:#fff;box-shadow:var(--shadow);grid-column:1/-1;min-height:0;flex-direction:row;align-items:center">
+      <span class="ic" style="background:var(--cream)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#6B2F45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19l5-6 4 3 7-9"/><path d="M15 7h5v5"/></svg></span>
+      <span style="flex:1;display:flex;flex-direction:column;gap:2px"><b>8 週增重計畫</b><span class="s" id="planShort">49 → 52.2 kg</span></span>
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2B1E22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
     <a class="sc" href="#shop" style="background:var(--peach)">
       <span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#C46A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h18l-1.5 10.5a1.5 1.5 0 0 1-1.5 1.5H6a1.5 1.5 0 0 1-1.5-1.5L3 9z"/><path d="M8 9l3.5-6M16 9l-3.5-6M9 13v4M15 13v4"/></svg></span>
       <b>採買清單</b><span class="s" id="shopShort">常備食材與低組織胺搭配</span>
@@ -221,6 +226,52 @@ details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px
   </div>
   <div id="prevNotes" style="display:flex;flex-direction:column;gap:10px"></div>
   <p class="foot">記錄只存在這個瀏覽器，方便之後和醫師或營養師討論。</p>
+</section>
+
+<!-- ===== 8 週計畫 ===== -->
+<section class="view" id="v-plan" hidden>
+  <div class="page-title">
+    <a class="back" href="#home" aria-label="回首頁"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2B1E22" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a>
+    <h1>8 週增重計畫</h1>
+  </div>
+
+  <div class="hero" style="flex-direction:column;align-items:stretch;gap:14px">
+    <div class="row" style="justify-content:space-between">
+      <span style="font-size:13px;opacity:.92" id="planRange"></span>
+      <span class="num" style="font-size:14px;font-weight:700" id="planWeekBadge"></span>
+    </div>
+    <div style="display:flex;align-items:baseline;gap:8px">
+      <span class="num big">49</span><span class="num" style="font-size:18px;font-weight:700;opacity:.9">→ 52.2 kg</span>
+    </div>
+    <div style="height:10px;border-radius:999px;background:rgba(255,255,255,.22);overflow:hidden"><div id="planBar" style="height:100%;width:0;border-radius:999px;background:#F2B64E"></div></div>
+    <span style="font-size:12px;opacity:.92" id="planPace"></span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+    <div class="card" style="padding:14px;gap:4px"><span class="sub">體重</span><b class="num" style="font-size:17px">+3.2 kg</b><span class="sub" style="font-size:11px">49 → 52.2</span></div>
+    <div class="card" style="padding:14px;gap:4px"><span class="sub">骨骼肌</span><b class="num" style="font-size:17px">22 kg</b><span class="sub" style="font-size:11px">從 21.8 穩住</span></div>
+    <div class="card" style="padding:14px;gap:4px"><span class="sub">體脂肪率</span><b class="num" style="font-size:17px">16–20%</b><span class="sub" style="font-size:11px">現在 18.2%</span></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <h2 style="font-size:16px">體重走勢</h2>
+      <span class="sub" style="display:flex;gap:10px;align-items:center"><span><i style="display:inline-block;width:14px;border-top:2px dashed #C9A9B5;vertical-align:middle"></i> 目標</span><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#6B2F45;vertical-align:middle"></i> 我的平均</span></span>
+    </div>
+    <div id="chart"></div>
+  </div>
+
+  <div class="card">
+    <label for="wtInput" style="font-size:15px;font-weight:700">本週平均晨重 <span class="sub" style="font-weight:400">（選填）</span></label>
+    <p class="sub">量了幾次就把這週的平均填進來，用來對照目標線。</p>
+    <div class="row">
+      <input id="wtInput" type="number" inputmode="decimal" step="0.1" min="30" max="100" placeholder="例如 49.4" style="flex:1;min-width:0;height:48px;padding:0 16px;border:0;border-radius:16px;background:var(--bg);font-size:16px">
+      <span style="font-weight:700">kg</span>
+    </div>
+  </div>
+
+  <div id="weekList" style="display:flex;flex-direction:column;gap:8px"></div>
+  <p class="foot" id="planNote"></p>
 </section>
 
 </main>
@@ -328,6 +379,9 @@ details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px
     });
     document.getElementById('cards').innerHTML = html;
     document.getElementById('doneCount').textContent = done;
+    document.getElementById('planLine').textContent = planHeadline();
+    var cw = planWeekOf(weekKey);
+    document.getElementById('planShort').textContent = (cw>=1 && cw<=PLAN.weeks) ? '第 '+cw+' 週 · 本週目標 '+targetAt(cw)+' kg' : '49 → 52.2 kg';
     lastStamped = null;
     var sh = shopState(), tot = allItems(sh).length, rd = allItems(sh).filter(function(n){return sh.checked[n];}).length;
     document.getElementById('shopShort').textContent = '已備妥 ' + rd + ' / ' + tot + ' 項';
@@ -426,11 +480,76 @@ details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px
     });
   });
 
+  // ---------- 8 週計畫 ----------
+  var PLAN = { start:'2026-11-23', weeks:8, from:49, to:52.2 };
+  // 週一起算：11/24 是週二，所以第 1 週是 11/23（週一）到 11/29
+  function planWeekOf(key){ return Math.floor((new Date(key+'T00:00:00Z') - new Date(PLAN.start+'T00:00:00Z')) / (7*864e5)) + 1; }
+  function planMonday(i){ var d = new Date(PLAN.start+'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + (i-1)*7); return d; }
+  function targetAt(i){ return Math.round((PLAN.from + (PLAN.to-PLAN.from) * i / PLAN.weeks) * 10) / 10; }
+  function weekDone(key){ var st = load('bd:week:'+key, {counts:{}}), d = 0; TASKS.forEach(function(t){ if((st.counts[t.id]||0) >= t.goal) d++; }); return d; }
+  function planHeadline(){
+    var w = planWeekOf(weekKey);
+    if(w < 1) return '8 週計畫尚未開始';
+    if(w > PLAN.weeks) return '8 週計畫已完成';
+    return '8 週計畫 · 第 ' + w + ' / ' + PLAN.weeks + ' 週 · 目標 ' + targetAt(w) + ' kg';
+  }
+  function renderPlan(){
+    refreshWeek();
+    var cur = planWeekOf(weekKey), endMon = planMonday(PLAN.weeks);
+    document.getElementById('planRange').textContent = rangeLabel(planMonday(1)).split(' – ')[0] + ' – ' + rangeLabel(endMon).split(' – ')[1];
+    document.getElementById('planWeekBadge').textContent = cur < 1 ? '尚未開始' : cur > PLAN.weeks ? '已完成' : '第 ' + cur + ' / ' + PLAN.weeks + ' 週';
+    var latest = null;
+    for(var i=1;i<=PLAN.weeks;i++){ var v = load('bd:wt:'+iso(planMonday(i)), null); if(v) latest = v; }
+    var pct = latest ? Math.max(0, Math.min(1, (latest-PLAN.from)/(PLAN.to-PLAN.from))) : Math.max(0, Math.min(1, (cur-1)/PLAN.weeks));
+    document.getElementById('planBar').style.width = (pct*100).toFixed(0) + '%';
+    document.getElementById('planPace').textContent = latest
+      ? '最近一週平均 ' + latest + ' kg，已增加 ' + (Math.round((latest-PLAN.from)*10)/10) + ' kg'
+      : '每週約 +0.4 kg，填入每週平均晨重就能看到進度';
+    document.getElementById('wtInput').value = load('bd:wt:'+weekKey, '') || '';
+
+    // 圖表
+    var W = 320, H = 150, pl = 34, pr = 10, pt = 10, pb = 24, lo = 48.5, hi = 52.7;
+    function x(i){ return pl + (W-pl-pr) * i / PLAN.weeks; }
+    function y(v){ return pt + (H-pt-pb) * (hi - v) / (hi - lo); }
+    var s = '<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="目標體重與每週平均體重走勢">';
+    [49,50,51,52].forEach(function(v){ s += '<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="#EFE7DF"/><text x="'+(pl-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="10" fill="#7A6A6E" font-family="Poppins">'+v+'</text>'; });
+    for(var j=0;j<=PLAN.weeks;j++) s += '<text x="'+x(j)+'" y="'+(H-6)+'" text-anchor="middle" font-size="10" fill="#7A6A6E" font-family="Poppins">'+(j===0?'起':j)+'</text>';
+    s += '<line x1="'+x(0)+'" y1="'+y(PLAN.from)+'" x2="'+x(PLAN.weeks)+'" y2="'+y(PLAN.to)+'" stroke="#C9A9B5" stroke-width="2" stroke-dasharray="5 5"/>';
+    var pts = [[0,PLAN.from]];
+    for(var k=1;k<=PLAN.weeks;k++){ var vv = load('bd:wt:'+iso(planMonday(k)), null); if(vv) pts.push([k, Math.max(lo, Math.min(hi, vv))]); }
+    if(pts.length > 1) s += '<polyline fill="none" stroke="#6B2F45" stroke-width="2.5" stroke-linejoin="round" points="'+pts.map(function(p){return x(p[0])+','+y(p[1]);}).join(' ')+'"/>';
+    pts.forEach(function(p){ s += '<circle cx="'+x(p[0])+'" cy="'+y(p[1])+'" r="4" fill="#6B2F45" stroke="#fff" stroke-width="1.5"/>'; });
+    s += '</svg>';
+    document.getElementById('chart').innerHTML = s;
+
+    // 週列表
+    var html = '';
+    for(var n=1;n<=PLAN.weeks;n++){
+      var key = iso(planMonday(n)), done = weekDone(key), wt = load('bd:wt:'+key, null), isCur = n === cur, past = n < cur;
+      var dots = '';
+      for(var m=0;m<3;m++) dots += '<i style="width:10px;height:10px;border-radius:50%;background:'+(m<done?'#6B2F45':'#EFE7DF')+'"></i>';
+      html += '<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:18px;background:'+(isCur?'var(--cream)':'#fff')+';box-shadow:0 4px 14px rgba(43,30,34,.05);opacity:'+(n>cur?.65:1)+'">' +
+        '<span class="num" style="width:34px;height:34px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;background:'+(isCur?'#6B2F45':'var(--bg)')+';color:'+(isCur?'#fff':'var(--ink)')+'">'+n+'</span>' +
+        '<span style="flex:1;display:flex;flex-direction:column;gap:2px"><b style="font-size:14px">'+rangeLabel(planMonday(n))+(isCur?' · 本週':'')+'</b><span class="sub">目標 '+targetAt(n)+' kg'+(wt?' · 實際 '+wt+' kg':'')+'</span></span>' +
+        '<span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span style="display:flex;gap:4px">'+dots+'</span><span class="sub" style="font-size:11px">'+(past||isCur? '達成 '+done+' / 3':'')+'</span></span>' +
+        '</div>';
+    }
+    document.getElementById('weekList').innerHTML = html;
+    document.getElementById('planNote').innerHTML = '你提供的圖表是 9～10 週到 2/1，每週約 +0.3～0.35 kg。<br>壓縮成 8 週約每週 +0.4 kg，若體脂上升太快可放慢，延長到 2/1 也沒關係。';
+  }
+  document.getElementById('wtInput').addEventListener('change', function(e){
+    var v = parseFloat(e.target.value);
+    if(isNaN(v)){ try{ localStorage.removeItem('bd:wt:'+weekKey); }catch(_){} delete mem['bd:wt:'+weekKey]; }
+    else save('bd:wt:'+weekKey, Math.round(v*10)/10);
+    renderPlan(); toast('已記下本週平均');
+  });
+
   // ---------- 路由 ----------
   function route(){
-    var v = (location.hash || '#home').slice(1); if(['home','shop','notes'].indexOf(v) < 0) v = 'home';
-    ['home','shop','notes'].forEach(function(x){ document.getElementById('v-'+x).hidden = x !== v; });
-    if(v==='home') renderHome(); else if(v==='shop') renderShop(); else renderNotes();
+    var V = ['home','shop','notes','plan'];
+    var v = (location.hash || '#home').slice(1); if(V.indexOf(v) < 0) v = 'home';
+    V.forEach(function(x){ document.getElementById('v-'+x).hidden = x !== v; });
+    if(v==='home') renderHome(); else if(v==='shop') renderShop(); else if(v==='plan') renderPlan(); else renderNotes();
     window.scrollTo(0,0);
   }
   window.addEventListener('hashchange', route);
