@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FAF6F0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BetterDay">
+<title>BetterDay 集點卡</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 8C44 8 53 24 52 40 51 54 42 58 32 58S13 54 12 40C11 24 20 8 32 8Z' fill='%23F2B64E'/%3E%3Cpath d='M12.5 37C18 33 25 41 32 37S46 33 51.5 37C51 52 42 58 32 58S13 52 12.5 37Z' fill='%235A2238'/%3E%3Cpath d='M32 8C44 8 53 24 52 40 51 54 42 58 32 58S13 54 12 40C11 24 20 8 32 8Z' fill='none' stroke='%232B1E22' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#FAF6F0; --card:#FFFFFF; --ink:#2B1E22; --muted:#7A6A6E;
+  --plum:#6B2F45; --plum-ink:#7A3350; --skin:#5A2238; --gold:#F2B64E;
+  --cream:#FBEBC8; --peach:#FFF4E6; --lilac:#EEE6F2; --line:#D9CFC6;
+  --shadow:0 6px 20px rgba(43,30,34,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans TC','PingFang TC',sans-serif;-webkit-tap-highlight-color:transparent}
+button,input,textarea{font-family:inherit;color:inherit}
+a{color:var(--plum-ink)}
+.num{font-family:Poppins,sans-serif}
+.app{max-width:480px;margin:0 auto;padding:max(20px,env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:18px}
+.view[hidden]{display:none}
+.view{display:flex;flex-direction:column;gap:18px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.hello{font-size:13px;color:var(--muted)}
+h1{margin:0;font-size:26px;font-weight:900;line-height:1.2}
+.pill{display:flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-radius:999px;background:var(--card);box-shadow:var(--shadow);font-size:13px;font-weight:700;white-space:nowrap}
+.hero{position:relative;overflow:hidden;display:flex;align-items:center;gap:8px;padding:20px;border-radius:24px;background:var(--plum);color:#fff;box-shadow:0 10px 24px rgba(107,47,69,.28)}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.1)}
+.hero::before{right:-30px;top:-40px;width:140px;height:140px}
+.hero::after{right:70px;bottom:-50px;width:100px;height:100px}
+.hero>*{position:relative}
+.hero .big{font-size:44px;font-weight:800;line-height:1}
+.card{background:var(--card);border-radius:24px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.icon{width:48px;height:48px;border-radius:16px;display:flex;align-items:center;justify-content:center;flex:none}
+.card h2{margin:0;font-size:18px;font-weight:700;line-height:1.25}
+.sub{margin:0;font-size:12px;line-height:1.5;color:var(--muted)}
+.prog{font-size:22px;font-weight:800;line-height:1.1;white-space:nowrap;text-align:right}
+.cells{display:flex;flex-wrap:wrap;gap:8px}
+.cell{width:46px;height:46px}
+.cell svg{display:block;width:46px;height:46px}
+.cell.pop svg{animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{0%{transform:scale(.2) rotate(-25deg);opacity:0}100%{transform:scale(1) rotate(var(--r,0deg));opacity:1}}
+.row{display:flex;gap:10px;align-items:center}
+.btn{height:48px;border:0;border-radius:16px;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-main{flex:1;background:var(--plum);color:#fff;letter-spacing:.06em;box-shadow:0 6px 14px rgba(107,47,69,.28)}
+.btn-main:active{transform:translateY(1px)}
+.btn-ghost{padding:0 18px;background:var(--bg);color:var(--ink);font-size:15px}
+.btn:disabled{opacity:.4;cursor:default}
+.done-bar{flex:1;height:48px;border-radius:16px;background:var(--cream);color:var(--plum-ink);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}
+.link{align-self:flex-start;display:flex;align-items:center;gap:4px;background:none;border:0;padding:4px 0;color:var(--plum-ink);font-size:13px;font-weight:700;cursor:pointer}
+.how{margin:0;padding:12px 14px;border-radius:14px;font-size:13px;line-height:1.7;white-space:pre-line}
+.shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.sc{display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:22px;text-decoration:none;color:var(--ink);min-height:118px}
+.sc .ic{width:40px;height:40px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center}
+.sc b{font-size:15px}
+.sc span.s{font-size:12px;color:var(--muted);line-height:1.4}
+.foot{margin:4px 0 0;text-align:center;font-size:11.5px;line-height:1.6;color:var(--muted)}
+.back{width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;text-decoration:none;flex:none}
+.page-title{display:flex;align-items:center;gap:12px}
+.page-title h1{font-size:22px}
+.summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;border-radius:24px;background:#fff;box-shadow:var(--shadow)}
+.group-h{display:flex;align-items:center;gap:10px;padding:0 2px}
+.group-h h2{margin:0;font-size:15px;flex:1}
+.dot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.dot i{width:12px;height:12px;border-radius:50%}
+.items{display:flex;flex-direction:column;gap:8px}
+.item{display:flex;align-items:center;gap:14px;min-height:56px;padding:0 10px 0 16px;border-radius:18px;background:#fff;cursor:pointer;box-shadow:0 4px 14px rgba(43,30,34,.05)}
+.item.on{background:var(--cream)}
+.item input{width:22px;height:22px;margin:0;accent-color:var(--plum);cursor:pointer}
+.item .name{flex:1;font-size:16px;font-weight:500}
+.item.on .name{color:var(--plum-ink)}
+.tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;background:#fff;color:var(--plum-ink)}
+.del{width:36px;height:36px;border:0;border-radius:50%;background:transparent;color:var(--muted);cursor:pointer;font-size:18px}
+.add{display:flex;gap:8px}
+.add input{flex:1;min-width:0;height:48px;padding:0 16px;border:0;border-radius:16px;background:#fff;font-size:16px;box-shadow:0 4px 14px rgba(43,30,34,.05)}
+.meal{display:flex;gap:14px;align-items:center;padding:14px;border-radius:22px;background:#fff;box-shadow:var(--shadow)}
+.meal .pic{width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;flex:none}
+.meal h3{margin:0 0 4px;font-size:16px}
+.meal p{margin:0;font-size:12.5px;line-height:1.6;color:var(--muted)}
+.tips{margin:0;padding:16px;list-style:none;display:flex;flex-direction:column;gap:12px;border-radius:22px;background:var(--cream)}
+.tips li{display:flex;gap:10px;font-size:13px;line-height:1.6}
+.tips b{flex:none;color:var(--plum-ink)}
+.src{margin:0;font-size:11.5px;line-height:1.7;color:var(--muted)}
+.note-intro{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:24px;background:var(--lilac)}
+.note-intro p{margin:0;font-size:13px;line-height:1.7}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{height:36px;padding:0 14px;border:0;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer}
+textarea{width:100%;padding:16px;border:0;border-radius:18px;background:var(--bg);font-size:16px;line-height:1.75;resize:vertical;min-height:260px;outline-color:var(--plum)}
+.saved{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--plum-ink);padding:4px 10px;border-radius:999px;background:var(--cream)}
+details.prev{border-radius:18px;background:#fff;box-shadow:0 4px 14px rgba(43,30,34,.05)}
+details.prev summary{min-height:52px;padding:0 18px;display:flex;align-items:center;font-size:15px;font-weight:700;cursor:pointer;list-style:none}
+details.prev summary::-webkit-details-marker{display:none}
+details.prev summary .num{margin-left:6px;color:var(--muted)}
+details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px;line-height:1.8;color:var(--muted);white-space:pre-wrap}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;font-weight:700;transition:.25s;pointer-events:none;z-index:9}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<main class="app">
+
+<!-- ===== 首頁 ===== -->
+<section class="view" id="v-home">
+  <header class="top">
+    <div>
+      <div class="hello">今天也要好好吃飯</div>
+      <h1>本週集點卡</h1>
+    </div>
+    <div class="pill num" id="weekLabel"></div>
+  </header>
+
+  <div class="hero">
+    <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:13px;opacity:.92">本週已達成</span>
+      <div style="display:flex;align-items:baseline;gap:6px">
+        <span class="num big" id="doneCount">0</span>
+        <span class="num" style="font-size:18px;font-weight:700;opacity:.9">/ 3 項</span>
+      </div>
+      <span style="font-size:12px;opacity:.92">台北時間每週一重新開始</span>
+    </div>
+    <svg viewBox="0 0 120 120" width="112" height="112" role="img" aria-label="微笑蕃薯">
+      <g transform="rotate(12 60 62)">
+        <path d="M60 12C82 12 100 40 98 70 96 96 80 110 60 110S24 96 22 70C20 40 38 12 60 12Z" fill="none" stroke="#FAF6F0" stroke-width="12" stroke-linejoin="round"/>
+        <path d="M60 12C82 12 100 40 98 70 96 96 80 110 60 110S24 96 22 70C20 40 38 12 60 12Z" fill="#F2B64E"/>
+        <path d="M23.5 66C34 58 46 72 60 64S84 56 96.5 64C97 86 86 110 60 110S23 90 23.5 66Z" fill="#5A2238"/>
+        <path d="M38 80l3 5M52 88l2 6M68 86l3 6M82 78l2 5M46 100l2 4M62 102l1 5" stroke="#2B1E22" stroke-width="3.2" stroke-linecap="round"/>
+        <circle cx="50" cy="42" r="3.2" fill="#2B1E22"/><circle cx="70" cy="42" r="3.2" fill="#2B1E22"/>
+        <path d="M51 51c4 6 14 6 18 0" fill="none" stroke="#2B1E22" stroke-width="3" stroke-linecap="round"/>
+        <ellipse cx="41" cy="52" rx="5" ry="3" fill="#F2A2A2"/><ellipse cx="79" cy="52" rx="5" ry="3" fill="#F2A2A2"/>
+        <path d="M60 12C82 12 100 40 98 70 96 96 80 110 60 110S24 96 22 70C20 40 38 12 60 12Z" fill="none" stroke="#2B1E22" stroke-width="4" stroke-linejoin="round"/>
+      </g>
+      <path d="M100 14l4-4M108 20l5-1M96 8l1-5" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div id="cards" style="display:flex;flex-direction:column;gap:14px"></div>
+
+  <nav class="shortcuts" aria-label="捷徑">
+    <a class="sc" href="#shop" style="background:var(--peach)">
+      <span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#C46A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h18l-1.5 10.5a1.5 1.5 0 0 1-1.5 1.5H6a1.5 1.5 0 0 1-1.5-1.5L3 9z"/><path d="M8 9l3.5-6M16 9l-3.5-6M9 13v4M15 13v4"/></svg></span>
+      <b>採買清單</b><span class="s" id="shopShort">常備食材與低組織胺搭配</span>
+    </a>
+    <a class="sc" href="#notes" style="background:var(--lilac)">
+      <span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#6B2F45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span>
+      <b>食物與症狀紀錄</b><span class="s">癢或起疹時記下吃了什麼</span>
+    </a>
+  </nav>
+  <p class="foot">打卡進度與備註依週保存在這個瀏覽器<br>晨重只記錄量了幾次，體重數字請自行記錄</p>
+</section>
+
+<!-- ===== 採買清單 ===== -->
+<section class="view" id="v-shop" hidden>
+  <div class="page-title">
+    <a class="back" href="#home" aria-label="回首頁"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2B1E22" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a>
+    <h1>採買清單</h1>
+  </div>
+  <div class="summary">
+    <div>
+      <div style="font-size:13px;color:var(--muted)">已備妥</div>
+      <div style="display:flex;align-items:baseline;gap:4px">
+        <span class="num" id="readyN" style="font-size:36px;font-weight:800;line-height:1;color:var(--plum-ink)">0</span>
+        <span class="num" id="totalN" style="font-size:16px;font-weight:700;color:var(--muted)">/ 0 項</span>
+      </div>
+    </div>
+    <button class="btn btn-ghost" id="clearShop" style="height:42px;border-radius:999px;font-size:13px">一次取消勾選</button>
+  </div>
+  <p class="sub" style="font-size:12.5px">家裡已有或買到就打勾，用完取消勾選。狀態存在這個瀏覽器，跨週保留。</p>
+  <div id="groups" style="display:flex;flex-direction:column;gap:14px"></div>
+  <form class="add" id="addForm">
+    <label class="sr" for="addInput">新增食材</label>
+    <input id="addInput" placeholder="新增常備食材，例如：南瓜" autocomplete="off">
+    <button class="btn btn-main" style="flex:none;padding:0 18px;font-size:14px">加入</button>
+  </form>
+
+  <h2 style="margin:8px 0 0;font-size:18px">低組織胺搭配參考</h2>
+  <p class="sub" style="margin-top:-12px;font-size:12.5px">都用清單裡的食材就能組出來，當作加餐或正餐都可以。</p>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <article class="meal"><div class="pic" style="background:var(--peach)"><svg viewBox="0 0 40 40" width="38" height="38" fill="none" stroke="#C46A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22h28a14 14 0 0 1-28 0z" fill="#fff"/><path d="M12 16c0-4 3-7 8-7s8 3 8 7M20 9V6"/></svg></div>
+      <div><h3>雞腿飯配紅蘿蔔</h3><p>白米 · 新鮮去骨雞腿 · 紅蘿蔔 · 一匙橄欖油。雞腿當天買當天煎。</p></div></article>
+    <article class="meal"><div class="pic" style="background:var(--cream)"><svg viewBox="0 0 64 64" width="44" height="44" aria-hidden="true"><path d="M32 8C44 8 53 24 52 40 51 54 42 58 32 58S13 54 12 40C11 24 20 8 32 8Z" fill="#F2B64E"/><path d="M12.5 37C18 33 25 41 32 37S46 33 51.5 37C51 52 42 58 32 58S13 52 12.5 37Z" fill="#5A2238"/><path d="M32 8C44 8 53 24 52 40 51 54 42 58 32 58S13 54 12 40C11 24 20 8 32 8Z" fill="none" stroke="#2B1E22" stroke-width="2.4"/></svg></div>
+      <div><h3>地瓜配蛋</h3><p>地瓜蒸熟 · 雞蛋水煮或煎。最省事的加餐，一顆地瓜加一到兩顆蛋。</p></div></article>
+    <article class="meal"><div class="pic" style="background:var(--lilac)"><svg viewBox="0 0 40 40" width="38" height="38" fill="none" stroke="#6B2F45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 24h24v4a6 6 0 0 1-6 6H14a6 6 0 0 1-6-6z" fill="#fff"/><circle cx="14" cy="18" r="3"/><circle cx="21" cy="15" r="3"/><circle cx="27" cy="19" r="3"/></svg></div>
+      <div><h3>藜麥藍莓碗</h3><p>藜麥煮熟放涼 · 藍莓 · 蘋果切丁。想增加熱量就淋一點橄欖油。</p></div></article>
+  </div>
+  <ul class="tips">
+    <li><b>新鮮度</b><span>組織胺會隨存放時間增加。肉類當天買當天煮，剩菜不放隔夜。</span></li>
+    <li><b>保存方式</b><span>煮好的食物盡快分裝冷藏或冷凍，要吃再加熱，不要反覆退冰。</span></li>
+    <li><b>個人耐受</b><span>每個人的耐受度不同。新食材一次只加一樣，觀察一兩天再決定留不留。</span></li>
+  </ul>
+  <p class="src">參考來源：<a href="https://www.histaminintoleranz.ch/en/" target="_blank" rel="noopener">SIGHI 瑞士組織胺不耐症協會食物相容性清單</a>；Maintz &amp; Novak（2007），Histamine and histamine intolerance，American Journal of Clinical Nutrition。本頁為個人整理，不是醫療建議。</p>
+</section>
+
+<!-- ===== 紀錄 ===== -->
+<section class="view" id="v-notes" hidden>
+  <div class="page-title">
+    <a class="back" href="#home" aria-label="回首頁"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2B1E22" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a>
+    <h1>食物與症狀紀錄</h1>
+  </div>
+  <div class="note-intro">
+    <svg viewBox="0 0 64 64" width="56" height="56" aria-hidden="true" style="flex:none"><g transform="rotate(-10 32 33)"><path d="M32 6C45 6 55 24 54 40 53 55 43 60 32 60S11 55 10 40C9 24 19 6 32 6Z" fill="#F2B64E"/><path d="M10.5 37C17 32 25 41 32 37S47 32 53.5 37C53 53 43 60 32 60S11 53 10.5 37Z" fill="#5A2238"/><circle cx="26.5" cy="24" r="1.9" fill="#2B1E22"/><circle cx="37.5" cy="24" r="1.9" fill="#2B1E22"/><path d="M27.5 29.5c2 3 7 3 9 0" fill="none" stroke="#2B1E22" stroke-width="1.7" stroke-linecap="round"/><path d="M32 6C45 6 55 24 54 40 53 55 43 60 32 60S11 55 10 40C9 24 19 6 32 6Z" fill="none" stroke="#2B1E22" stroke-width="2.4"/></g></svg>
+    <p>有癢或起疹時，記下<b>吃了什麼、食材怎麼保存、多久後出現症狀</b>。備註隨輸入儲存，依週保存在這個瀏覽器。</p>
+  </div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <label for="note" style="font-size:15px;font-weight:700">本週 <span class="num" id="noteWeek" style="color:var(--plum-ink)"></span></label>
+      <span class="saved" id="saved">已儲存</span>
+    </div>
+    <div class="chips">
+      <button class="chip" data-chip="吃了什麼" style="background:var(--peach)">+ 吃了什麼</button>
+      <button class="chip" data-chip="怎麼保存" style="background:var(--cream)">+ 怎麼保存</button>
+      <button class="chip" data-chip="多久後出現" style="background:var(--lilac)">+ 多久後出現</button>
+    </div>
+    <textarea id="note" placeholder="例如：&#10;吃了什麼：週二晚上吃了前一天煎的雞腿&#10;怎麼保存：常溫放到隔天早上才冰&#10;多久後出現：約 40 分鐘後手臂開始癢"></textarea>
+  </div>
+  <div id="prevNotes" style="display:flex;flex-direction:column;gap:10px"></div>
+  <p class="foot">記錄只存在這個瀏覽器，方便之後和醫師或營養師討論。</p>
+</section>
+
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  // ---------- 儲存 ----------
+  var mem = {};
+  function load(k, d){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return k in mem ? mem[k] : d; } }
+  function save(k, v){ mem[k] = v; try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+  // ---------- 台北時間的週一 ----------
+  function taipeiNow(){ return new Date(Date.now() + 8*3600*1000); } // 用 UTC 欄位讀取即為台北時間
+  function mondayOf(d){ var x = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())); var wd = (x.getUTCDay()+6)%7; x.setUTCDate(x.getUTCDate()-wd); return x; }
+  function iso(d){ return d.toISOString().slice(0,10); }
+  function md(d){ return (d.getUTCMonth()+1) + '/' + d.getUTCDate(); }
+  function rangeLabel(mon){ var s = new Date(mon); s.setUTCDate(s.getUTCDate()+6); return md(mon) + ' – ' + md(s); }
+  var week, weekKey;
+  function refreshWeek(){ week = mondayOf(taipeiNow()); weekKey = iso(week); }
+  refreshWeek();
+
+  // ---------- 蕃薯章 ----------
+  var BODY = 'M32 12C42 12 50 26 49 40 48 52 40 56 32 56S16 52 15 40C14 26 22 12 32 12Z';
+  var SKIN = 'M15.4 37C20 33.5 26 40.5 32 37S44 33.5 48.6 37C48 51 40 56 32 56S16 51 15.4 37Z';
+  function potato(face, extraBack, extraFront){
+    return '<circle cx="32" cy="32" r="30" fill="#FFF1D6"/>' + (extraBack||'') +
+      '<path d="'+BODY+'" fill="#F2B64E"/><path d="'+SKIN+'" fill="#5A2238"/>' +
+      '<path d="M23 45l1.3 2.2M31 49l.8 2.6M39 46l1.3 2.2" stroke="#2B1E22" stroke-width="1.7" stroke-linecap="round"/>' +
+      face + '<path d="'+BODY+'" fill="none" stroke="#2B1E22" stroke-width="2.2" stroke-linejoin="round"/>' + (extraFront||'');
+  }
+  var FACE_SMILE = '<circle cx="27.5" cy="26" r="1.7" fill="#2B1E22"/><circle cx="36.5" cy="26" r="1.7" fill="#2B1E22"/><path d="M29 30.5c1.8 2.4 4.2 2.4 6 0" fill="none" stroke="#2B1E22" stroke-width="1.5" stroke-linecap="round"/>';
+  var FACE_YUM = '<path d="M25.5 26.5q2-2 4 0M34.5 26.5q2-2 4 0" fill="none" stroke="#2B1E22" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="32" cy="31" rx="2.4" ry="2" fill="#2B1E22"/><ellipse cx="24" cy="30" rx="2.4" ry="1.4" fill="#F2A2A2"/><ellipse cx="40" cy="30" rx="2.4" ry="1.4" fill="#F2A2A2"/>';
+  var FACE_GRIT = '<path d="M25 24.5l4 1.5M39 24.5l-4 1.5" stroke="#2B1E22" stroke-width="1.5" stroke-linecap="round"/><circle cx="28" cy="27.5" r="1.5" fill="#2B1E22"/><circle cx="36" cy="27.5" r="1.5" fill="#2B1E22"/><path d="M29 31.5h6" stroke="#2B1E22" stroke-width="1.6" stroke-linecap="round"/><path d="M45 20q1.5 2.5 0 3.5q-1.5-1 0-3.5z" fill="#8EC5E8"/>';
+  var STAMPS = {
+    // 加餐：抱著飯碗、筷子
+    snack: potato(FACE_YUM, '',
+      '<path d="M18 44h28a14 9 0 0 1-28 0z" fill="#fff" stroke="#2B1E22" stroke-width="2" stroke-linejoin="round"/>' +
+      '<path d="M21 44q3-4 6 0q3-4 5 0q3-4 6 0q3-4 5 0" fill="#fff" stroke="#2B1E22" stroke-width="1.6" stroke-linejoin="round"/>' +
+      '<path d="M41 33l10-8M44 35l10-7" stroke="#2B1E22" stroke-width="2" stroke-linecap="round"/>'),
+    // 重訓：舉啞鈴過頭
+    lift: potato(FACE_GRIT,
+      '<path d="M17 30l-3-14M47 30l3-14" stroke="#2B1E22" stroke-width="2.2" stroke-linecap="round"/>' +
+      '<path d="M8 14h48" stroke="#2B1E22" stroke-width="2.6" stroke-linecap="round"/>' +
+      '<rect x="5" y="8" width="6" height="12" rx="2" fill="#6B2F45" stroke="#2B1E22" stroke-width="1.8"/>' +
+      '<rect x="53" y="8" width="6" height="12" rx="2" fill="#6B2F45" stroke="#2B1E22" stroke-width="1.8"/>', ''),
+    // 晨重：站在體重計上
+    weigh: '<circle cx="32" cy="32" r="30" fill="#FFF1D6"/>' +
+      '<g transform="translate(0 -5)"><path d="'+BODY+'" fill="#F2B64E"/><path d="'+SKIN+'" fill="#5A2238"/>' + FACE_SMILE +
+      '<path d="'+BODY+'" fill="none" stroke="#2B1E22" stroke-width="2.2" stroke-linejoin="round"/></g>' +
+      '<rect x="12" y="49" width="40" height="9" rx="3" fill="#fff" stroke="#2B1E22" stroke-width="2"/>' +
+      '<path d="M28 53.5h8" stroke="#6B2F45" stroke-width="2" stroke-linecap="round"/>' +
+      '<path d="M50 14l3-3M53 20h4M46 10l1-4" stroke="#C46A2B" stroke-width="2" stroke-linecap="round"/>'
+  };
+  function emptyCell(n){ return '<circle cx="32" cy="32" r="28" fill="#FAF6F0" stroke="#D9CFC6" stroke-width="2" stroke-dasharray="4 4"/><text x="32" y="37.5" text-anchor="middle" font-family="Poppins,sans-serif" font-size="15" font-weight="700" fill="#7A6A6E">'+n+'</text>'; }
+
+  // ---------- 任務 ----------
+  var TASKS = [
+    { id:'snack', title:'多吃一份加餐', goal:7, tint:'var(--peach)', when:'吃完一份額外加餐後打卡',
+      icon:'<svg viewBox="0 0 64 64" width="38" height="38" aria-hidden="true">'+STAMPS.snack+'</svg>',
+      how:'在三餐之外多吃一份，用平常吃得習慣的食材就好，例如地瓜配蛋、白飯加橄欖油。\n吃完再按蓋章。' },
+    { id:'lift', title:'上半身重訓', goal:2, tint:'var(--lilac)', when:'完成一次訓練後打卡，兩次至少隔一天',
+      icon:'<svg viewBox="0 0 64 64" width="38" height="38" aria-hidden="true">'+STAMPS.lift+'</svg>',
+      how:'推、拉、肩各挑一個動作，每個動作 3 組 8–12 下。\n兩次訓練之間至少休息一天，讓肌肉有時間恢復。' },
+    { id:'weigh', title:'量晨重', goal:3, tint:'var(--cream)', when:'起床上完廁所、早餐前量體重後打卡',
+      icon:'<svg viewBox="0 0 64 64" width="38" height="38" aria-hidden="true">'+STAMPS.weigh+'</svg>',
+      how:'固定同一台體重計、穿差不多的衣服。\n這裡只記錄量了幾次，體重數字和平均值請自行記錄。' }
+  ];
+  var openHow = {};
+  var lastStamped = null;
+
+  function weekState(){ return load('bd:week:'+weekKey, { counts:{}, undo:{} }); }
+
+  function renderHome(){
+    refreshWeek();
+    document.getElementById('weekLabel').textContent = rangeLabel(week);
+    var st = weekState(), done = 0, html = '';
+    TASKS.forEach(function(t){
+      var n = Math.max(0, Math.min(t.goal, st.counts[t.id]||0));
+      var isDone = n >= t.goal; if(isDone) done++;
+      var canUndo = !!st.undo[t.id] && n > 0;
+      var cells = '';
+      for(var i=0;i<t.goal;i++){
+        var rot = ((i*37)%13)-6;
+        var pop = (lastStamped === t.id && i === n-1) ? ' pop' : '';
+        cells += i < n
+          ? '<div class="cell'+pop+'" style="--r:'+rot+'deg"><svg viewBox="0 0 64 64" role="img" aria-label="第 '+(i+1)+' 格已蓋章" style="transform:rotate('+rot+'deg)">'+STAMPS[t.id]+'</svg></div>'
+          : '<div class="cell"><svg viewBox="0 0 64 64" role="img" aria-label="第 '+(i+1)+' 格未蓋章">'+emptyCell(i+1)+'</svg></div>';
+      }
+      var undoBtn = '<button class="btn btn-ghost" data-undo="'+t.id+'"'+(canUndo?'':' disabled')+'>撤回</button>';
+      var action = isDone
+        ? '<div class="done-bar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>本週已達成</div>'
+        : '<button class="btn btn-main" data-stamp="'+t.id+'">蓋章</button>';
+      var o = !!openHow[t.id];
+      html += '<article class="card">' +
+        '<div class="card-head"><div class="row" style="gap:12px"><div class="icon" style="background:'+t.tint+'">'+t.icon+'</div>' +
+        '<div><h2>'+t.title+'</h2><p class="sub">'+t.when+'</p></div></div>' +
+        '<div><div class="prog num" style="color:'+(isDone?'var(--plum-ink)':'var(--ink)')+'">'+n+' / '+t.goal+'</div><div class="sub" style="font-size:11px;text-align:right">每週 '+t.goal+' 次</div></div></div>' +
+        '<div class="cells">'+cells+'</div>' +
+        '<div class="row">'+action+undoBtn+'</div>' +
+        '<button class="link" data-how="'+t.id+'" aria-expanded="'+o+'">'+(o?'收起做法':'查看做法')+
+        '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform:rotate('+(o?180:0)+'deg)"><path d="M6 9l6 6 6-6"/></svg></button>' +
+        (o ? '<p class="how" style="background:'+t.tint+'">'+t.how+'</p>' : '') +
+        '</article>';
+    });
+    document.getElementById('cards').innerHTML = html;
+    document.getElementById('doneCount').textContent = done;
+    lastStamped = null;
+    var sh = shopState(), tot = allItems(sh).length, rd = allItems(sh).filter(function(n){return sh.checked[n];}).length;
+    document.getElementById('shopShort').textContent = '已備妥 ' + rd + ' / ' + tot + ' 項';
+  }
+
+  document.getElementById('cards').addEventListener('click', function(e){
+    var b = e.target.closest('button'); if(!b) return;
+    var st = weekState();
+    if(b.dataset.stamp){
+      var t = TASKS.filter(function(x){return x.id===b.dataset.stamp;})[0];
+      var n = st.counts[t.id]||0; if(n >= t.goal) return;
+      st.counts[t.id] = n+1; st.undo[t.id] = true; save('bd:week:'+weekKey, st);
+      lastStamped = t.id; renderHome();
+      if(n+1 === t.goal) toast(t.title + ' 本週達成！');
+    } else if(b.dataset.undo){
+      var id = b.dataset.undo; if(!st.undo[id] || !(st.counts[id]>0)) return;
+      st.counts[id]--; st.undo[id] = false; save('bd:week:'+weekKey, st); renderHome();
+    } else if(b.dataset.how){
+      openHow[b.dataset.how] = !openHow[b.dataset.how]; renderHome();
+    }
+  });
+
+  // ---------- 採買 ----------
+  var BASE = [
+    { name:'主食', tint:'#FFF9DB', dot:'#D9A400', items:['白米','藜麥','地瓜'] },
+    { name:'蛋白質', tint:'#FFE9E9', dot:'#E05B5B', items:['雞蛋','新鮮去骨雞腿'] },
+    { name:'蔬果', tint:'#FBEBC8', dot:'#C46A2B', items:['紅蘿蔔','蘋果','藍莓'] },
+    { name:'加餐常備', tint:'#FFF4E6', dot:'#F2B64E', items:['橄欖油'] }
+  ];
+  function shopState(){ return load('bd:shop', { checked:{}, extra:[] }); }
+  function allItems(s){ var a=[]; BASE.forEach(function(g){a=a.concat(g.items);}); return a.concat(s.extra); }
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function renderShop(){
+    var s = shopState(), groups = BASE.slice();
+    if(s.extra.length) groups.push({ name:'自己加的', tint:'#EEE6F2', dot:'#6B2F45', items:s.extra, custom:true });
+    var html = '';
+    groups.forEach(function(g){
+      var n = g.items.filter(function(x){return s.checked[x];}).length;
+      html += '<div style="display:flex;flex-direction:column;gap:8px"><div class="group-h"><span class="dot" style="background:'+g.tint+'"><i style="background:'+g.dot+'"></i></span><h2>'+g.name+'</h2><span class="num sub" style="font-size:13px;font-weight:700">'+n+' / '+g.items.length+'</span></div><div class="items">';
+      g.items.forEach(function(it){
+        var on = !!s.checked[it];
+        html += '<label class="item'+(on?' on':'')+'"><input type="checkbox" data-item="'+esc(it)+'"'+(on?' checked':'')+'><span class="name">'+esc(it)+'</span>'+(on?'<span class="tag">已備妥</span>':'')+
+          (g.custom?'<button type="button" class="del" data-del="'+esc(it)+'" aria-label="刪除 '+esc(it)+'">×</button>':'')+'</label>';
+      });
+      html += '</div></div>';
+    });
+    document.getElementById('groups').innerHTML = html;
+    var all = allItems(s), rd = all.filter(function(x){return s.checked[x];}).length;
+    document.getElementById('readyN').textContent = rd;
+    document.getElementById('totalN').textContent = '/ ' + all.length + ' 項';
+    document.getElementById('clearShop').disabled = rd === 0;
+  }
+  document.getElementById('groups').addEventListener('change', function(e){
+    var k = e.target.dataset.item; if(k == null) return;
+    var s = shopState(); if(e.target.checked) s.checked[k] = true; else delete s.checked[k];
+    save('bd:shop', s); renderShop();
+  });
+  document.getElementById('groups').addEventListener('click', function(e){
+    var b = e.target.closest('[data-del]'); if(!b) return; e.preventDefault();
+    var s = shopState(), k = b.dataset.del;
+    s.extra = s.extra.filter(function(x){return x!==k;}); delete s.checked[k]; save('bd:shop', s); renderShop();
+  });
+  document.getElementById('clearShop').addEventListener('click', function(){
+    var s = shopState(); s.checked = {}; save('bd:shop', s); renderShop(); toast('已全部取消勾選');
+  });
+  document.getElementById('addForm').addEventListener('submit', function(e){
+    e.preventDefault(); var inp = document.getElementById('addInput'), v = inp.value.trim(); if(!v) return;
+    var s = shopState(); if(allItems(s).indexOf(v) >= 0){ toast('清單裡已經有了'); return; }
+    s.extra.push(v); save('bd:shop', s); inp.value = ''; renderShop();
+  });
+
+  // ---------- 紀錄 ----------
+  var noteEl = document.getElementById('note'), savedEl = document.getElementById('saved'), saveTimer;
+  function renderNotes(){
+    refreshWeek();
+    document.getElementById('noteWeek').textContent = rangeLabel(week);
+    noteEl.value = load('bd:note:'+weekKey, '');
+    var keys = [];
+    try{ for(var i=0;i<localStorage.length;i++){ var k = localStorage.key(i); if(k.indexOf('bd:note:')===0 && k !== 'bd:note:'+weekKey) keys.push(k.slice(8)); } }catch(e){}
+    keys.sort().reverse();
+    document.getElementById('prevNotes').innerHTML = keys.map(function(k){
+      var txt = load('bd:note:'+k, ''); if(!txt.trim()) return '';
+      return '<details class="prev"><summary>之前 <span class="num">'+rangeLabel(new Date(k+'T00:00:00Z'))+'</span></summary><pre>'+esc(txt)+'</pre></details>';
+    }).join('');
+  }
+  noteEl.addEventListener('input', function(){
+    savedEl.textContent = '輸入中…'; clearTimeout(saveTimer);
+    save('bd:note:'+weekKey, noteEl.value);
+    saveTimer = setTimeout(function(){ savedEl.textContent = '已儲存'; }, 500);
+  });
+  document.querySelectorAll('[data-chip]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var v = noteEl.value, sep = !v || /\n$/.test(v) ? '' : '\n';
+      noteEl.value = v + sep + b.dataset.chip + '：'; save('bd:note:'+weekKey, noteEl.value);
+      noteEl.focus(); noteEl.setSelectionRange(noteEl.value.length, noteEl.value.length);
+    });
+  });
+
+  // ---------- 路由 ----------
+  function route(){
+    var v = (location.hash || '#home').slice(1); if(['home','shop','notes'].indexOf(v) < 0) v = 'home';
+    ['home','shop','notes'].forEach(function(x){ document.getElementById('v-'+x).hidden = x !== v; });
+    if(v==='home') renderHome(); else if(v==='shop') renderShop(); else renderNotes();
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange', route);
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden){ var k = weekKey; refreshWeek(); if(k !== weekKey) route(); } });
+
+  var tt;
+  function toast(msg){ var el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(tt); tt = setTimeout(function(){ el.classList.remove('show'); }, 1800); }
+
+  route();
+})();
+</script>
+</body>
+</html>
