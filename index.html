@@ -12,6 +12,7 @@
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Huninn&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700;800&amp;display=swap&amp;text=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz%20/%2B-.%2C%25%3A%28%29%26~%E2%80%93%E2%86%92" rel="stylesheet">
 <style>
 :root{
   --bg:#FBF4E8; --card:#FFFCF6; --ink:#4A2F1D; --muted:#80634B;
@@ -20,16 +21,16 @@
   --shadow:0 6px 18px rgba(90,58,34,.08);
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans TC','PingFang TC',sans-serif;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'LINE Seed JP','Noto Sans TC','PingFang TC',sans-serif;-webkit-tap-highlight-color:transparent}
 body{background-image:radial-gradient(rgba(166,90,44,.05) 1px,transparent 1px);background-size:14px 14px}
 button,input,textarea,select{font-family:inherit;color:inherit}
 a{color:var(--brown-ink)}
-.r{font-family:Huninn,'Noto Sans TC',sans-serif;font-weight:400}
+.r{font-family:'LINE Seed JP',Huninn,'Noto Sans TC',sans-serif;font-weight:400}
 .app{max-width:480px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 28px) 16px calc(104px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
 .view[hidden]{display:none}
 .view{display:flex;flex-direction:column;gap:16px}
-h1{margin:0;font-size:27px;line-height:1.2;font-family:Huninn,sans-serif;font-weight:400}
-h2{margin:0;font-size:18px;line-height:1.3;font-family:Huninn,sans-serif;font-weight:400}
+h1{margin:0;font-size:27px;line-height:1.2;font-family:'LINE Seed JP',Huninn,sans-serif;font-weight:400}
+h2{margin:0;font-size:18px;line-height:1.3;font-family:'LINE Seed JP',Huninn,sans-serif;font-weight:400}
 .sub{margin:0;font-size:12.5px;line-height:1.55;color:var(--muted)}
 .row{display:flex;gap:10px;align-items:center}
 .card{background:var(--card);border-radius:26px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
@@ -37,7 +38,7 @@ h2{margin:0;font-size:18px;line-height:1.3;font-family:Huninn,sans-serif;font-we
 .hero{position:relative;overflow:hidden;display:flex;align-items:center;gap:8px;padding:18px 18px 18px 22px;border-radius:28px;background:var(--butter)}
 .hero::before{content:"";position:absolute;right:-40px;top:-50px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.45)}
 .hero>*{position:relative}
-.big{font-family:Huninn,sans-serif;font-size:46px;line-height:1;color:var(--brown-ink)}
+.big{font-family:'LINE Seed JP',Huninn,sans-serif;font-weight:800;font-size:46px;line-height:1;color:var(--brown-ink)}
 .btn{min-height:48px;border:0;border-radius:18px;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 18px}
 .btn-main{flex:1;background:var(--brown);color:#fff;box-shadow:0 5px 0 #7E4220}
 .btn-main:active{transform:translateY(3px);box-shadow:0 2px 0 #7E4220}
@@ -48,7 +49,7 @@ h2{margin:0;font-size:18px;line-height:1.3;font-family:Huninn,sans-serif;font-we
 .how{margin:0;padding:12px 14px;border-radius:16px;background:var(--bg);font-size:13px;line-height:1.7;white-space:pre-line}
 .habit-head{display:flex;gap:12px;align-items:center}
 .habit-icon{width:60px;height:60px;flex:none;border-radius:20px;background:var(--bg);display:flex;align-items:center;justify-content:center}
-.count{font-family:Huninn,sans-serif;font-size:24px;line-height:1;white-space:nowrap}
+.count{font-family:'LINE Seed JP',Huninn,sans-serif;font-weight:700;font-size:24px;line-height:1;white-space:nowrap}
 .done-tag{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--yellow);color:var(--ink)}
 .bonus-tag{font-size:12px;font-weight:700;color:var(--brown-ink)}
 .cells{display:flex;flex-wrap:wrap;gap:6px}
@@ -75,7 +76,7 @@ h2{margin:0;font-size:18px;line-height:1.3;font-family:Huninn,sans-serif;font-we
 .del{width:36px;height:36px;border:0;border-radius:50%;background:transparent;color:var(--muted);cursor:pointer;font-size:20px}
 .text-in{flex:1;min-width:0;height:48px;padding:0 16px;border:0;border-radius:16px;background:var(--card);box-shadow:var(--shadow);font-size:16px}
 .meal{display:flex;gap:14px;align-items:center;padding:12px 14px;border-radius:22px;background:var(--card)}
-.meal h3{margin:0 0 4px;font-size:16px;font-family:Huninn,sans-serif;font-weight:400}
+.meal h3{margin:0 0 4px;font-size:16px;font-family:'LINE Seed JP',Huninn,sans-serif;font-weight:400}
 .meal p{margin:0;font-size:12.5px;line-height:1.6;color:var(--muted)}
 .tips{margin:0;padding:16px;list-style:none;display:flex;flex-direction:column;gap:12px;border-radius:22px;background:var(--butter)}
 .tips li{display:flex;gap:10px;font-size:13px;line-height:1.6}
@@ -93,7 +94,7 @@ details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px
 .pick:has(input:checked){border-color:var(--brown);background:var(--butter);color:var(--brown-ink)}
 .pick:has(input:focus-visible){outline:2px solid var(--brown)}
 .stepper{display:flex;align-items:center;gap:6px}
-.stepper span{min-width:46px;text-align:center;font-family:Huninn,sans-serif;font-size:18px}
+.stepper span{min-width:46px;text-align:center;font-family:'LINE Seed JP',Huninn,sans-serif;font-size:18px}
 .hist-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:0;background:var(--bg);border-radius:14px;padding:8px 10px;margin-top:4px}
 .dots{display:flex;flex-wrap:wrap;gap:3px;max-width:120px;justify-content:flex-end}
 .dots i{width:9px;height:9px;border-radius:50%}
@@ -307,7 +308,7 @@ details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px
   function stampSvg(key, label, bonus){
     return '<span role="img" aria-label="'+label+'" style="display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;background:'+(bonus?'#FBDDBF':'#FCEBC0')+'"><img src="stamps/'+iconKey(key)+'.png" width="44" height="44" alt=""></span>';
   }
-  function emptySvg(n){ return '<svg viewBox="0 0 100 100" role="img" aria-label="第 '+n+' 格未蓋章"><circle cx="50" cy="50" r="45" fill="#F4E7D4"/><text x="50" y="59" text-anchor="middle" font-family="Huninn,sans-serif" font-size="26" fill="#80634B">'+n+'</text></svg>'; }
+  function emptySvg(n){ return '<svg viewBox="0 0 100 100" role="img" aria-label="第 '+n+' 格未蓋章"><circle cx="50" cy="50" r="45" fill="#F4E7D4"/><text x="50" y="59" text-anchor="middle" font-family="LINE Seed JP,Huninn,sans-serif" font-weight="700" font-size="26" fill="#80634B">'+n+'</text></svg>'; }
 
   // ---------- 習慣 ----------
   var DEFAULT_HABITS = [
