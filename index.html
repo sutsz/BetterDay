@@ -3,438 +3,615 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#FAF6F0">
+<meta name="theme-color" content="#FBF4E8">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="BetterDay">
-<title>BetterDay 集點卡</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<title>BetterDay 地瓜集點</title>
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 8C44 8 53 24 52 40 51 54 42 58 32 58S13 54 12 40C11 24 20 8 32 8Z' fill='%23F2B64E'/%3E%3Cpath d='M12.5 37C18 33 25 41 32 37S46 33 51.5 37C51 52 42 58 32 58S13 52 12.5 37Z' fill='%235A2238'/%3E%3Cpath d='M32 8C44 8 53 24 52 40 51 54 42 58 32 58S13 54 12 40C11 24 20 8 32 8Z' fill='none' stroke='%232B1E22' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Huninn&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#FAF6F0; --card:#FFFFFF; --ink:#2B1E22; --muted:#7A6A6E;
-  --plum:#6B2F45; --plum-ink:#7A3350; --skin:#5A2238; --gold:#F2B64E;
-  --cream:#FBEBC8; --peach:#FFF4E6; --lilac:#EEE6F2; --line:#D9CFC6;
-  --shadow:0 6px 20px rgba(43,30,34,.06);
+  --bg:#FBF4E8; --card:#FFFCF6; --ink:#4A2F1D; --muted:#80634B;
+  --brown:#A65A2C; --brown-ink:#8A4A22; --line-ink:#5A3A22;
+  --yellow:#F6C64A; --butter:#FCEBC0; --peach:#FBE3CC; --pill:#F8E3C1; --line:#EAD8C0;
+  --shadow:0 6px 18px rgba(90,58,34,.08);
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans TC','PingFang TC',sans-serif;-webkit-tap-highlight-color:transparent}
-button,input,textarea{font-family:inherit;color:inherit}
-a{color:var(--plum-ink)}
-.num{font-family:Poppins,sans-serif}
-.app{max-width:480px;margin:0 auto;padding:max(20px,env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:18px}
+body{background-image:radial-gradient(rgba(166,90,44,.05) 1px,transparent 1px);background-size:14px 14px}
+button,input,textarea,select{font-family:inherit;color:inherit}
+a{color:var(--brown-ink)}
+.r{font-family:Huninn,'Noto Sans TC',sans-serif;font-weight:400}
+.app{max-width:480px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px calc(104px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
 .view[hidden]{display:none}
-.view{display:flex;flex-direction:column;gap:18px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.hello{font-size:13px;color:var(--muted)}
-h1{margin:0;font-size:26px;font-weight:900;line-height:1.2}
-.pill{display:flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-radius:999px;background:var(--card);box-shadow:var(--shadow);font-size:13px;font-weight:700;white-space:nowrap}
-.hero{position:relative;overflow:hidden;display:flex;align-items:center;gap:8px;padding:20px;border-radius:24px;background:var(--plum);color:#fff;box-shadow:0 10px 24px rgba(107,47,69,.28)}
-.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.1)}
-.hero::before{right:-30px;top:-40px;width:140px;height:140px}
-.hero::after{right:70px;bottom:-50px;width:100px;height:100px}
-.hero>*{position:relative}
-.hero .big{font-size:44px;font-weight:800;line-height:1}
-.card{background:var(--card);border-radius:24px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
-.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.icon{width:48px;height:48px;border-radius:16px;display:flex;align-items:center;justify-content:center;flex:none}
-.card h2{margin:0;font-size:18px;font-weight:700;line-height:1.25}
-.sub{margin:0;font-size:12px;line-height:1.5;color:var(--muted)}
-.prog{font-size:22px;font-weight:800;line-height:1.1;white-space:nowrap;text-align:right}
-.cells{display:flex;flex-wrap:wrap;gap:8px}
-.cell{width:46px;height:46px}
-.cell svg{display:block;width:46px;height:46px}
-.cell.pop svg{animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
-@keyframes pop{0%{transform:scale(.2) rotate(-25deg);opacity:0}100%{transform:scale(1) rotate(var(--r,0deg));opacity:1}}
+.view{display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:27px;line-height:1.2;font-family:Huninn,sans-serif;font-weight:400}
+h2{margin:0;font-size:18px;line-height:1.3;font-family:Huninn,sans-serif;font-weight:400}
+.sub{margin:0;font-size:12.5px;line-height:1.55;color:var(--muted)}
 .row{display:flex;gap:10px;align-items:center}
-.btn{height:48px;border:0;border-radius:16px;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-main{flex:1;background:var(--plum);color:#fff;letter-spacing:.06em;box-shadow:0 6px 14px rgba(107,47,69,.28)}
-.btn-main:active{transform:translateY(1px)}
-.btn-ghost{padding:0 18px;background:var(--bg);color:var(--ink);font-size:15px}
+.card{background:var(--card);border-radius:26px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow);border:1.5px solid #F1E3CF}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:var(--pill);font-size:13px;color:var(--brown-ink);white-space:nowrap}
+.hero{position:relative;overflow:hidden;display:flex;align-items:center;gap:8px;padding:18px 18px 18px 22px;border-radius:28px;background:var(--butter);border:1.5px solid #F2D899}
+.hero::before{content:"";position:absolute;right:-40px;top:-50px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.45)}
+.hero>*{position:relative}
+.big{font-family:Huninn,sans-serif;font-size:46px;line-height:1;color:var(--brown-ink)}
+.btn{min-height:48px;border:0;border-radius:18px;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 18px}
+.btn-main{flex:1;background:var(--brown);color:#fff;box-shadow:0 5px 0 #7E4220}
+.btn-main:active{transform:translateY(3px);box-shadow:0 2px 0 #7E4220}
+.btn-ghost{background:var(--pill);color:var(--ink);font-size:15px}
 .btn:disabled{opacity:.4;cursor:default}
-.done-bar{flex:1;height:48px;border-radius:16px;background:var(--cream);color:var(--plum-ink);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}
-.link{align-self:flex-start;display:flex;align-items:center;gap:4px;background:none;border:0;padding:4px 0;color:var(--plum-ink);font-size:13px;font-weight:700;cursor:pointer}
-.how{margin:0;padding:12px 14px;border-radius:14px;font-size:13px;line-height:1.7;white-space:pre-line}
-.shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.sc{display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:22px;text-decoration:none;color:var(--ink);min-height:118px}
-.sc .ic{width:40px;height:40px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center}
-.sc b{font-size:15px}
-.sc span.s{font-size:12px;color:var(--muted);line-height:1.4}
-.foot{margin:4px 0 0;text-align:center;font-size:11.5px;line-height:1.6;color:var(--muted)}
-.back{width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;text-decoration:none;flex:none}
-.page-title{display:flex;align-items:center;gap:12px}
-.page-title h1{font-size:22px}
-.summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;border-radius:24px;background:#fff;box-shadow:var(--shadow)}
+.icon-btn{width:40px;height:40px;border:0;border-radius:14px;background:var(--pill);color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
+.link{align-self:flex-start;display:flex;align-items:center;gap:4px;background:none;border:0;padding:4px 0;color:var(--brown-ink);font-size:13px;font-weight:700;cursor:pointer}
+.how{margin:0;padding:12px 14px;border-radius:16px;background:var(--bg);font-size:13px;line-height:1.7;white-space:pre-line}
+.habit-head{display:flex;gap:12px;align-items:center}
+.habit-icon{width:60px;height:60px;flex:none;border-radius:20px;background:var(--bg);display:flex;align-items:center;justify-content:center}
+.count{font-family:Huninn,sans-serif;font-size:24px;line-height:1;white-space:nowrap}
+.done-tag{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--yellow);color:var(--ink)}
+.bonus-tag{font-size:12px;font-weight:700;color:var(--brown-ink)}
+.cells{display:flex;flex-wrap:wrap;gap:6px}
+.cell{width:50px;height:50px;position:relative}
+.cell svg{display:block;width:50px;height:50px}
+.cell .plus{position:absolute;right:-2px;top:-2px;width:18px;height:18px;border-radius:50%;background:var(--brown);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--card)}
+.cell.pop svg{animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{0%{transform:scale(.2) rotate(-30deg);opacity:0}100%{transform:scale(1) rotate(var(--r,0deg));opacity:1}}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:5;background:rgba(255,252,246,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1.5px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+.tabs-in{max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;min-height:52px;text-decoration:none;color:var(--muted);font-size:11.5px;font-weight:700;border-radius:14px}
+.tab svg{width:24px;height:24px}
+.tab[aria-current="page"]{color:var(--brown-ink);background:var(--butter)}
+.title-row{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.back{width:44px;height:44px;border-radius:50%;background:var(--card);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;text-decoration:none;flex:none}
 .group-h{display:flex;align-items:center;gap:10px;padding:0 2px}
-.group-h h2{margin:0;font-size:15px;flex:1}
-.dot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.dot i{width:12px;height:12px;border-radius:50%}
+.group-h h2{font-size:16px;flex:1}
 .items{display:flex;flex-direction:column;gap:8px}
-.item{display:flex;align-items:center;gap:14px;min-height:56px;padding:0 10px 0 16px;border-radius:18px;background:#fff;cursor:pointer;box-shadow:0 4px 14px rgba(43,30,34,.05)}
-.item.on{background:var(--cream)}
-.item input{width:22px;height:22px;margin:0;accent-color:var(--plum);cursor:pointer}
-.item .name{flex:1;font-size:16px;font-weight:500}
-.item.on .name{color:var(--plum-ink)}
-.tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;background:#fff;color:var(--plum-ink)}
-.del{width:36px;height:36px;border:0;border-radius:50%;background:transparent;color:var(--muted);cursor:pointer;font-size:18px}
-.add{display:flex;gap:8px}
-.add input{flex:1;min-width:0;height:48px;padding:0 16px;border:0;border-radius:16px;background:#fff;font-size:16px;box-shadow:0 4px 14px rgba(43,30,34,.05)}
-.meal{display:flex;gap:14px;align-items:center;padding:14px;border-radius:22px;background:#fff;box-shadow:var(--shadow)}
-.meal .pic{width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;flex:none}
-.meal h3{margin:0 0 4px;font-size:16px}
+.item{display:flex;align-items:center;gap:14px;min-height:56px;padding:0 10px 0 16px;border-radius:18px;background:var(--card);cursor:pointer;border:1.5px solid #F1E3CF}
+.item.on{background:var(--butter);border-color:#F2D899}
+.item input{width:22px;height:22px;margin:0;accent-color:var(--brown);cursor:pointer}
+.item .name{flex:1;font-size:16px}
+.tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--card);color:var(--brown-ink)}
+.del{width:36px;height:36px;border:0;border-radius:50%;background:transparent;color:var(--muted);cursor:pointer;font-size:20px}
+.text-in{flex:1;min-width:0;height:48px;padding:0 16px;border:1.5px solid var(--line);border-radius:16px;background:var(--card);font-size:16px}
+.meal{display:flex;gap:14px;align-items:center;padding:12px 14px;border-radius:22px;background:var(--card);border:1.5px solid #F1E3CF}
+.meal h3{margin:0 0 4px;font-size:16px;font-family:Huninn,sans-serif;font-weight:400}
 .meal p{margin:0;font-size:12.5px;line-height:1.6;color:var(--muted)}
-.tips{margin:0;padding:16px;list-style:none;display:flex;flex-direction:column;gap:12px;border-radius:22px;background:var(--cream)}
+.tips{margin:0;padding:16px;list-style:none;display:flex;flex-direction:column;gap:12px;border-radius:22px;background:var(--butter)}
 .tips li{display:flex;gap:10px;font-size:13px;line-height:1.6}
-.tips b{flex:none;color:var(--plum-ink)}
-.src{margin:0;font-size:11.5px;line-height:1.7;color:var(--muted)}
-.note-intro{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:24px;background:var(--lilac)}
-.note-intro p{margin:0;font-size:13px;line-height:1.7}
+.tips b{flex:none;color:var(--brown-ink)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{height:36px;padding:0 14px;border:0;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer}
-textarea{width:100%;padding:16px;border:0;border-radius:18px;background:var(--bg);font-size:16px;line-height:1.75;resize:vertical;min-height:260px;outline-color:var(--plum)}
-.saved{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--plum-ink);padding:4px 10px;border-radius:999px;background:var(--cream)}
-details.prev{border-radius:18px;background:#fff;box-shadow:0 4px 14px rgba(43,30,34,.05)}
+.chip{height:36px;padding:0 14px;border:0;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;background:var(--pill)}
+textarea{width:100%;padding:16px;border:0;border-radius:18px;background:var(--bg);font-size:16px;line-height:1.75;resize:vertical;min-height:240px;outline-color:var(--brown)}
+details.prev{border-radius:18px;background:var(--card);border:1.5px solid #F1E3CF}
 details.prev summary{min-height:52px;padding:0 18px;display:flex;align-items:center;font-size:15px;font-weight:700;cursor:pointer;list-style:none}
 details.prev summary::-webkit-details-marker{display:none}
-details.prev summary .num{margin-left:6px;color:var(--muted)}
 details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px;line-height:1.8;color:var(--muted);white-space:pre-wrap}
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;font-weight:700;transition:.25s;pointer-events:none;z-index:9}
+.picker{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.pick{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border-radius:16px;border:2px solid transparent;background:var(--bg);cursor:pointer;font-size:11px;color:var(--muted)}
+.pick input{position:absolute;opacity:0;pointer-events:none}
+.pick:has(input:checked){border-color:var(--brown);background:var(--butter);color:var(--brown-ink)}
+.pick:has(input:focus-visible){outline:2px solid var(--brown)}
+.stepper{display:flex;align-items:center;gap:6px}
+.stepper span{min-width:46px;text-align:center;font-family:Huninn,sans-serif;font-size:18px}
+.hist-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px dashed var(--line)}
+.dots{display:flex;flex-wrap:wrap;gap:3px;max-width:120px;justify-content:flex-end}
+.dots i{width:9px;height:9px;border-radius:50%}
+.foot{margin:4px 0 0;text-align:center;font-size:11.5px;line-height:1.6;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;font-weight:700;transition:.25s;pointer-events:none;z-index:9;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="wob" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <radialGradient id="gFlesh" cx="40%" cy="28%" r="72%"><stop offset="0" stop-color="#FDE59A"/><stop offset=".6" stop-color="#F8CB4E"/><stop offset="1" stop-color="#EFB13A"/></radialGradient>
+    <radialGradient id="gSkin" cx="35%" cy="45%" r="75%"><stop offset="0" stop-color="#D88C55"/><stop offset=".7" stop-color="#BF6E3A"/><stop offset="1" stop-color="#A35A2D"/></radialGradient>
+  </defs>
+</svg>
+
 <main class="app">
 
-<!-- ===== 首頁 ===== -->
+<!-- ===== 本週 ===== -->
 <section class="view" id="v-home">
-  <header class="top">
+  <div class="title-row">
     <div>
-      <div class="hello">今天也要好好吃飯</div>
+      <p class="sub">今天也要好好吃飯</p>
       <h1>本週集點卡</h1>
     </div>
-    <div class="pill num" id="weekLabel"></div>
-  </header>
+    <span class="pill r" id="weekLabel"></span>
+  </div>
 
   <div class="hero">
     <div style="flex:1;display:flex;flex-direction:column;gap:6px">
-      <span style="font-size:13px;opacity:.92">本週已達成</span>
+      <span style="font-size:13px;color:var(--brown-ink)">本週已達成</span>
       <div style="display:flex;align-items:baseline;gap:6px">
-        <span class="num big" id="doneCount">0</span>
-        <span class="num" style="font-size:18px;font-weight:700;opacity:.9">/ 3 項</span>
+        <span class="big" id="doneCount">0</span>
+        <span class="r" style="font-size:18px;color:var(--brown-ink)" id="habitTotal">/ 3 項</span>
       </div>
-      <a href="#plan" id="planLine" style="font-size:12px;color:#fff;opacity:.95;text-decoration:underline;text-underline-offset:3px">8 週計畫</a>
+      <a href="#plan" id="planLine" class="r" style="font-size:13px;text-underline-offset:3px">8 週計畫</a>
     </div>
-    <svg viewBox="0 0 120 120" width="112" height="112" role="img" aria-label="微笑蕃薯">
-      <g transform="rotate(12 60 62)">
-        <path d="M60 12C82 12 100 40 98 70 96 96 80 110 60 110S24 96 22 70C20 40 38 12 60 12Z" fill="none" stroke="#FAF6F0" stroke-width="12" stroke-linejoin="round"/>
-        <path d="M60 12C82 12 100 40 98 70 96 96 80 110 60 110S24 96 22 70C20 40 38 12 60 12Z" fill="#F2B64E"/>
-        <path d="M23.5 66C34 58 46 72 60 64S84 56 96.5 64C97 86 86 110 60 110S23 90 23.5 66Z" fill="#5A2238"/>
-        <path d="M38 80l3 5M52 88l2 6M68 86l3 6M82 78l2 5M46 100l2 4M62 102l1 5" stroke="#2B1E22" stroke-width="3.2" stroke-linecap="round"/>
-        <circle cx="50" cy="42" r="3.2" fill="#2B1E22"/><circle cx="70" cy="42" r="3.2" fill="#2B1E22"/>
-        <path d="M51 51c4 6 14 6 18 0" fill="none" stroke="#2B1E22" stroke-width="3" stroke-linecap="round"/>
-        <ellipse cx="41" cy="52" rx="5" ry="3" fill="#F2A2A2"/><ellipse cx="79" cy="52" rx="5" ry="3" fill="#F2A2A2"/>
-        <path d="M60 12C82 12 100 40 98 70 96 96 80 110 60 110S24 96 22 70C20 40 38 12 60 12Z" fill="none" stroke="#2B1E22" stroke-width="4" stroke-linejoin="round"/>
-      </g>
-      <path d="M100 14l4-4M108 20l5-1M96 8l1-5" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-    </svg>
+    <span id="heroArt"></span>
   </div>
 
   <div id="cards" style="display:flex;flex-direction:column;gap:14px"></div>
 
-  <nav class="shortcuts" aria-label="捷徑">
-    <a class="sc" href="#plan" style="background:#fff;box-shadow:var(--shadow);grid-column:1/-1;min-height:0;flex-direction:row;align-items:center">
-      <span class="ic" style="background:var(--cream)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#6B2F45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19l5-6 4 3 7-9"/><path d="M15 7h5v5"/></svg></span>
-      <span style="flex:1;display:flex;flex-direction:column;gap:2px"><b>8 週增重計畫</b><span class="s" id="planShort">49 → 52.2 kg</span></span>
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2B1E22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
-    </a>
-    <a class="sc" href="#shop" style="background:var(--peach)">
-      <span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#C46A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h18l-1.5 10.5a1.5 1.5 0 0 1-1.5 1.5H6a1.5 1.5 0 0 1-1.5-1.5L3 9z"/><path d="M8 9l3.5-6M16 9l-3.5-6M9 13v4M15 13v4"/></svg></span>
-      <b>採買清單</b><span class="s" id="shopShort">常備食材與低組織胺搭配</span>
-    </a>
-    <a class="sc" href="#notes" style="background:var(--lilac)">
-      <span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#6B2F45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span>
-      <b>食物與症狀紀錄</b><span class="s">癢或起疹時記下吃了什麼</span>
-    </a>
-  </nav>
-  <p class="foot">打卡進度與備註依週保存在這個瀏覽器<br>晨重只記錄量了幾次，體重數字請自行記錄</p>
+  <a href="#next" class="card" style="flex-direction:row;align-items:center;text-decoration:none;color:var(--ink)">
+    <span class="habit-icon" style="width:52px;height:52px" id="nextArt"></span>
+    <span style="flex:1;display:flex;flex-direction:column;gap:2px"><span class="r" style="font-size:17px">規劃下週習慣</span><span class="sub" id="nextShort"></span></span>
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+  </a>
+  <p class="foot">達標後也可以繼續蓋章，多的會算加碼<br>資料只存在這個瀏覽器</p>
+</section>
+
+<!-- ===== 規劃下週 ===== -->
+<section class="view" id="v-next" hidden>
+  <div class="row">
+    <a class="back" href="#home" aria-label="回本週"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#4A2F1D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a>
+    <div><h1 style="font-size:23px">規劃下週習慣</h1><p class="sub r" id="nextRange"></p></div>
+  </div>
+  <p class="sub">下週一開始，集點卡會換成這份清單。沒有改的話，會沿用本週的習慣。</p>
+  <div id="nextList" style="display:flex;flex-direction:column;gap:10px"></div>
+  <button class="link" id="resetNext" style="align-self:flex-end">改回和本週一樣</button>
+
+  <form class="card" id="habitForm">
+    <h2>新增一個習慣</h2>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <label for="hName" style="font-size:14px;font-weight:700">習慣名稱</label>
+      <input id="hName" class="text-in" maxlength="16" placeholder="例如：喝水 2000 ml" required autocomplete="off">
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <label for="hWhen" style="font-size:14px;font-weight:700">什麼時候打卡 <span class="sub" style="display:inline;font-weight:400">（選填）</span></label>
+      <input id="hWhen" class="text-in" maxlength="30" placeholder="例如：一天喝滿後打卡" autocomplete="off">
+    </div>
+    <div class="row" style="justify-content:space-between">
+      <span style="font-size:14px;font-weight:700" id="goalLabel">每週目標</span>
+      <div class="stepper" role="group" aria-labelledby="goalLabel">
+        <button type="button" class="icon-btn" id="goalMinus" aria-label="減少一次">−</button>
+        <span id="goalVal" aria-live="polite">3 次</span>
+        <button type="button" class="icon-btn" id="goalPlus" aria-label="增加一次">+</button>
+      </div>
+    </div>
+    <fieldset style="border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:8px">
+      <legend style="font-size:14px;font-weight:700;padding:0;margin-bottom:8px">選一個地瓜章</legend>
+      <div class="picker" id="picker"></div>
+    </fieldset>
+    <button class="btn btn-main" type="submit">加到下週</button>
+  </form>
+</section>
+
+<!-- ===== 8 週計畫 ===== -->
+<section class="view" id="v-plan" hidden>
+  <div class="title-row"><h1>8 週增重計畫</h1><span class="pill r" id="planWeekBadge"></span></div>
+  <div class="hero" style="flex-direction:column;align-items:stretch;gap:12px">
+    <span class="r" style="font-size:13px;color:var(--brown-ink)" id="planRange"></span>
+    <div class="row" style="justify-content:space-between">
+      <div style="display:flex;align-items:baseline;gap:8px"><span class="big">49</span><span class="r" style="font-size:19px;color:var(--brown-ink)">→ 52.2 kg</span></div>
+      <span id="planArt"></span>
+    </div>
+    <div style="height:12px;border-radius:999px;background:rgba(255,255,255,.7);overflow:hidden;border:1.5px solid #F2D899"><div id="planBar" style="height:100%;width:0;border-radius:999px;background:var(--brown)"></div></div>
+    <span style="font-size:12.5px;color:var(--brown-ink)" id="planPace"></span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+    <div class="card" style="padding:14px;gap:4px"><span class="sub">體重</span><b class="r" style="font-size:18px;font-weight:400">+3.2 kg</b><span class="sub" style="font-size:11px">49 → 52.2</span></div>
+    <div class="card" style="padding:14px;gap:4px"><span class="sub">骨骼肌</span><b class="r" style="font-size:18px;font-weight:400">22 kg</b><span class="sub" style="font-size:11px">從 21.8 穩住</span></div>
+    <div class="card" style="padding:14px;gap:4px"><span class="sub">體脂肪率</span><b class="r" style="font-size:18px;font-weight:400">16–20%</b><span class="sub" style="font-size:11px">現在 18.2%</span></div>
+  </div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between;flex-wrap:wrap">
+      <h2 style="font-size:16px">體重走勢</h2>
+      <span class="sub" style="display:flex;gap:10px;align-items:center"><span><i style="display:inline-block;width:14px;border-top:2px dashed #D9B07E;vertical-align:middle"></i> 目標</span><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#A65A2C;vertical-align:middle"></i> 我的平均</span></span>
+    </div>
+    <div id="chart"></div>
+  </div>
+  <div class="card">
+    <label for="wtInput" style="font-size:15px;font-weight:700">本週平均晨重 <span class="sub" style="display:inline;font-weight:400">（選填）</span></label>
+    <p class="sub">量了幾次就把這週的平均填進來，用來對照目標線。</p>
+    <div class="row"><input id="wtInput" class="text-in" type="number" inputmode="decimal" step="0.1" min="30" max="100" placeholder="例如 49.4"><span style="font-weight:700">kg</span></div>
+  </div>
+  <div id="weekList" style="display:flex;flex-direction:column;gap:8px"></div>
+  <p class="foot">你提供的圖表是 9～10 週到 2/1，每週約 +0.3～0.35 kg。<br>壓縮成 8 週約每週 +0.4 kg，若體脂上升太快可以放慢，延長到 2/1 也沒關係。</p>
+</section>
+
+<!-- ===== 過去紀錄 ===== -->
+<section class="view" id="v-history" hidden>
+  <h1>過去的習慣</h1>
+  <p class="sub">每一週追蹤了哪些習慣、蓋了幾個章，都在這裡。</p>
+  <div id="histList" style="display:flex;flex-direction:column;gap:12px"></div>
 </section>
 
 <!-- ===== 採買清單 ===== -->
 <section class="view" id="v-shop" hidden>
-  <div class="page-title">
-    <a class="back" href="#home" aria-label="回首頁"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2B1E22" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a>
-    <h1>採買清單</h1>
+  <div class="title-row"><h1>採買清單</h1><span class="pill r"><span id="readyN">0</span>&nbsp;/&nbsp;<span id="totalN">0</span> 已備妥</span></div>
+  <div class="row" style="justify-content:space-between">
+    <p class="sub" style="flex:1">家裡已有或買到就打勾，用完取消勾選。跨週保留。</p>
+    <button class="btn btn-ghost" id="clearShop" style="min-height:40px;font-size:13px;border-radius:999px">全部取消勾選</button>
   </div>
-  <div class="summary">
-    <div>
-      <div style="font-size:13px;color:var(--muted)">已備妥</div>
-      <div style="display:flex;align-items:baseline;gap:4px">
-        <span class="num" id="readyN" style="font-size:36px;font-weight:800;line-height:1;color:var(--plum-ink)">0</span>
-        <span class="num" id="totalN" style="font-size:16px;font-weight:700;color:var(--muted)">/ 0 項</span>
-      </div>
-    </div>
-    <button class="btn btn-ghost" id="clearShop" style="height:42px;border-radius:999px;font-size:13px">一次取消勾選</button>
-  </div>
-  <p class="sub" style="font-size:12.5px">家裡已有或買到就打勾，用完取消勾選。狀態存在這個瀏覽器，跨週保留。</p>
   <div id="groups" style="display:flex;flex-direction:column;gap:14px"></div>
-  <form class="add" id="addForm">
+  <form class="row" id="addForm">
     <label class="sr" for="addInput">新增食材</label>
-    <input id="addInput" placeholder="新增常備食材，例如：南瓜" autocomplete="off">
-    <button class="btn btn-main" style="flex:none;padding:0 18px;font-size:14px">加入</button>
+    <input id="addInput" class="text-in" placeholder="新增常備食材，例如：南瓜" autocomplete="off">
+    <button class="btn btn-main" style="flex:none">加入</button>
   </form>
-
-  <h2 style="margin:8px 0 0;font-size:18px">低組織胺搭配參考</h2>
-  <p class="sub" style="margin-top:-12px;font-size:12.5px">都用清單裡的食材就能組出來，當作加餐或正餐都可以。</p>
+  <h2 style="margin-top:8px">低組織胺搭配參考</h2>
+  <p class="sub" style="margin-top:-10px">都用清單裡的食材就能組出來，當作加餐或正餐都可以。</p>
   <div style="display:flex;flex-direction:column;gap:10px">
-    <article class="meal"><div class="pic" style="background:var(--peach)"><svg viewBox="0 0 40 40" width="38" height="38" fill="none" stroke="#C46A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22h28a14 14 0 0 1-28 0z" fill="#fff"/><path d="M12 16c0-4 3-7 8-7s8 3 8 7M20 9V6"/></svg></div>
-      <div><h3>雞腿飯配紅蘿蔔</h3><p>白米 · 新鮮去骨雞腿 · 紅蘿蔔 · 一匙橄欖油。雞腿當天買當天煎。</p></div></article>
-    <article class="meal"><div class="pic" style="background:var(--cream)"><svg viewBox="0 0 64 64" width="44" height="44" aria-hidden="true"><path d="M32 8C44 8 53 24 52 40 51 54 42 58 32 58S13 54 12 40C11 24 20 8 32 8Z" fill="#F2B64E"/><path d="M12.5 37C18 33 25 41 32 37S46 33 51.5 37C51 52 42 58 32 58S13 52 12.5 37Z" fill="#5A2238"/><path d="M32 8C44 8 53 24 52 40 51 54 42 58 32 58S13 54 12 40C11 24 20 8 32 8Z" fill="none" stroke="#2B1E22" stroke-width="2.4"/></svg></div>
-      <div><h3>地瓜配蛋</h3><p>地瓜蒸熟 · 雞蛋水煮或煎。最省事的加餐，一顆地瓜加一到兩顆蛋。</p></div></article>
-    <article class="meal"><div class="pic" style="background:var(--lilac)"><svg viewBox="0 0 40 40" width="38" height="38" fill="none" stroke="#6B2F45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 24h24v4a6 6 0 0 1-6 6H14a6 6 0 0 1-6-6z" fill="#fff"/><circle cx="14" cy="18" r="3"/><circle cx="21" cy="15" r="3"/><circle cx="27" cy="19" r="3"/></svg></div>
-      <div><h3>藜麥藍莓碗</h3><p>藜麥煮熟放涼 · 藍莓 · 蘋果切丁。想增加熱量就淋一點橄欖油。</p></div></article>
+    <article class="meal"><span class="mealArt" data-art="bowl"></span><div><h3>雞腿飯配紅蘿蔔</h3><p>白米 · 新鮮去骨雞腿 · 紅蘿蔔 · 一匙橄欖油。雞腿當天買當天煎。</p></div></article>
+    <article class="meal"><span class="mealArt" data-art="star"></span><div><h3>地瓜配蛋</h3><p>地瓜蒸熟 · 雞蛋水煮或煎。最省事的加餐，一顆地瓜加一到兩顆蛋。</p></div></article>
+    <article class="meal"><span class="mealArt" data-art="heart"></span><div><h3>藜麥藍莓碗</h3><p>藜麥煮熟放涼 · 藍莓 · 蘋果切丁。想增加熱量就淋一點橄欖油。</p></div></article>
   </div>
   <ul class="tips">
     <li><b>新鮮度</b><span>組織胺會隨存放時間增加。肉類當天買當天煮，剩菜不放隔夜。</span></li>
     <li><b>保存方式</b><span>煮好的食物盡快分裝冷藏或冷凍，要吃再加熱，不要反覆退冰。</span></li>
     <li><b>個人耐受</b><span>每個人的耐受度不同。新食材一次只加一樣，觀察一兩天再決定留不留。</span></li>
   </ul>
-  <p class="src">參考來源：<a href="https://www.histaminintoleranz.ch/en/" target="_blank" rel="noopener">SIGHI 瑞士組織胺不耐症協會食物相容性清單</a>；Maintz &amp; Novak（2007），Histamine and histamine intolerance，American Journal of Clinical Nutrition。本頁為個人整理，不是醫療建議。</p>
+  <p class="sub" style="font-size:11.5px;line-height:1.7">參考來源：<a href="https://www.histaminintoleranz.ch/en/" target="_blank" rel="noopener">SIGHI 瑞士組織胺不耐症協會食物相容性清單</a>；Maintz &amp; Novak（2007），Histamine and histamine intolerance，American Journal of Clinical Nutrition。本頁為個人整理，不是醫療建議。</p>
 </section>
 
-<!-- ===== 紀錄 ===== -->
+<!-- ===== 備註 ===== -->
 <section class="view" id="v-notes" hidden>
-  <div class="page-title">
-    <a class="back" href="#home" aria-label="回首頁"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2B1E22" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a>
-    <h1>食物與症狀紀錄</h1>
-  </div>
-  <div class="note-intro">
-    <svg viewBox="0 0 64 64" width="56" height="56" aria-hidden="true" style="flex:none"><g transform="rotate(-10 32 33)"><path d="M32 6C45 6 55 24 54 40 53 55 43 60 32 60S11 55 10 40C9 24 19 6 32 6Z" fill="#F2B64E"/><path d="M10.5 37C17 32 25 41 32 37S47 32 53.5 37C53 53 43 60 32 60S11 53 10.5 37Z" fill="#5A2238"/><circle cx="26.5" cy="24" r="1.9" fill="#2B1E22"/><circle cx="37.5" cy="24" r="1.9" fill="#2B1E22"/><path d="M27.5 29.5c2 3 7 3 9 0" fill="none" stroke="#2B1E22" stroke-width="1.7" stroke-linecap="round"/><path d="M32 6C45 6 55 24 54 40 53 55 43 60 32 60S11 55 10 40C9 24 19 6 32 6Z" fill="none" stroke="#2B1E22" stroke-width="2.4"/></g></svg>
-    <p>有癢或起疹時，記下<b>吃了什麼、食材怎麼保存、多久後出現症狀</b>。備註隨輸入儲存，依週保存在這個瀏覽器。</p>
+  <h1>食物與症狀紀錄</h1>
+  <div class="hero" style="padding:14px 18px;gap:12px">
+    <span id="notesArt"></span>
+    <p style="margin:0;font-size:13px;line-height:1.7;flex:1">有癢或起疹時，記下<b>吃了什麼、食材怎麼保存、多久後出現症狀</b>。輸入時自動儲存。</p>
   </div>
   <div class="card">
     <div class="row" style="justify-content:space-between">
-      <label for="note" style="font-size:15px;font-weight:700">本週 <span class="num" id="noteWeek" style="color:var(--plum-ink)"></span></label>
-      <span class="saved" id="saved">已儲存</span>
+      <label for="note" style="font-size:15px;font-weight:700">本週 <span class="r" id="noteWeek" style="color:var(--brown-ink);font-weight:400"></span></label>
+      <span class="tag" id="saved" style="background:var(--butter)">已儲存</span>
     </div>
     <div class="chips">
-      <button class="chip" data-chip="吃了什麼" style="background:var(--peach)">+ 吃了什麼</button>
-      <button class="chip" data-chip="怎麼保存" style="background:var(--cream)">+ 怎麼保存</button>
-      <button class="chip" data-chip="多久後出現" style="background:var(--lilac)">+ 多久後出現</button>
+      <button class="chip" data-chip="吃了什麼">+ 吃了什麼</button>
+      <button class="chip" data-chip="怎麼保存">+ 怎麼保存</button>
+      <button class="chip" data-chip="多久後出現">+ 多久後出現</button>
     </div>
     <textarea id="note" placeholder="例如：&#10;吃了什麼：週二晚上吃了前一天煎的雞腿&#10;怎麼保存：常溫放到隔天早上才冰&#10;多久後出現：約 40 分鐘後手臂開始癢"></textarea>
   </div>
   <div id="prevNotes" style="display:flex;flex-direction:column;gap:10px"></div>
-  <p class="foot">記錄只存在這個瀏覽器，方便之後和醫師或營養師討論。</p>
-</section>
-
-<!-- ===== 8 週計畫 ===== -->
-<section class="view" id="v-plan" hidden>
-  <div class="page-title">
-    <a class="back" href="#home" aria-label="回首頁"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2B1E22" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a>
-    <h1>8 週增重計畫</h1>
-  </div>
-
-  <div class="hero" style="flex-direction:column;align-items:stretch;gap:14px">
-    <div class="row" style="justify-content:space-between">
-      <span style="font-size:13px;opacity:.92" id="planRange"></span>
-      <span class="num" style="font-size:14px;font-weight:700" id="planWeekBadge"></span>
-    </div>
-    <div style="display:flex;align-items:baseline;gap:8px">
-      <span class="num big">49</span><span class="num" style="font-size:18px;font-weight:700;opacity:.9">→ 52.2 kg</span>
-    </div>
-    <div style="height:10px;border-radius:999px;background:rgba(255,255,255,.22);overflow:hidden"><div id="planBar" style="height:100%;width:0;border-radius:999px;background:#F2B64E"></div></div>
-    <span style="font-size:12px;opacity:.92" id="planPace"></span>
-  </div>
-
-  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
-    <div class="card" style="padding:14px;gap:4px"><span class="sub">體重</span><b class="num" style="font-size:17px">+3.2 kg</b><span class="sub" style="font-size:11px">49 → 52.2</span></div>
-    <div class="card" style="padding:14px;gap:4px"><span class="sub">骨骼肌</span><b class="num" style="font-size:17px">22 kg</b><span class="sub" style="font-size:11px">從 21.8 穩住</span></div>
-    <div class="card" style="padding:14px;gap:4px"><span class="sub">體脂肪率</span><b class="num" style="font-size:17px">16–20%</b><span class="sub" style="font-size:11px">現在 18.2%</span></div>
-  </div>
-
-  <div class="card">
-    <div class="row" style="justify-content:space-between">
-      <h2 style="font-size:16px">體重走勢</h2>
-      <span class="sub" style="display:flex;gap:10px;align-items:center"><span><i style="display:inline-block;width:14px;border-top:2px dashed #C9A9B5;vertical-align:middle"></i> 目標</span><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#6B2F45;vertical-align:middle"></i> 我的平均</span></span>
-    </div>
-    <div id="chart"></div>
-  </div>
-
-  <div class="card">
-    <label for="wtInput" style="font-size:15px;font-weight:700">本週平均晨重 <span class="sub" style="font-weight:400">（選填）</span></label>
-    <p class="sub">量了幾次就把這週的平均填進來，用來對照目標線。</p>
-    <div class="row">
-      <input id="wtInput" type="number" inputmode="decimal" step="0.1" min="30" max="100" placeholder="例如 49.4" style="flex:1;min-width:0;height:48px;padding:0 16px;border:0;border-radius:16px;background:var(--bg);font-size:16px">
-      <span style="font-weight:700">kg</span>
-    </div>
-  </div>
-
-  <div id="weekList" style="display:flex;flex-direction:column;gap:8px"></div>
-  <p class="foot" id="planNote"></p>
 </section>
 
 </main>
+
+<nav class="tabs" aria-label="主要分頁">
+  <div class="tabs-in">
+    <a class="tab" href="#home" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c4.5 0 7.5 5 7.5 10.5S16 21 12 21s-7.5-2-7.5-7.5S7.5 3 12 3z"/><path d="M4.8 12c2.4-1.6 4.6 1.4 7.2 0s4.8-1.6 7.2 0"/></svg>本週</a>
+    <a class="tab" href="#plan" data-tab="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19l5-6 4 3 7-9"/><path d="M15 7h5v5"/></svg>8 週計畫</a>
+    <a class="tab" href="#history" data-tab="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>過去</a>
+    <a class="tab" href="#shop" data-tab="shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h18l-1.5 10.5a1.5 1.5 0 0 1-1.5 1.5H6a1.5 1.5 0 0 1-1.5-1.5L3 9z"/><path d="M8 9l3.5-6M16 9l-3.5-6"/></svg>採買</a>
+    <a class="tab" href="#notes" data-tab="notes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>紀錄</a>
+  </div>
+</nav>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
 (function(){
   // ---------- 儲存 ----------
   var mem = {};
-  function load(k, d){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return k in mem ? mem[k] : d; } }
+  function load(k, d){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : (k in mem ? mem[k] : d); }catch(e){ return k in mem ? mem[k] : d; } }
   function save(k, v){ mem[k] = v; try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  function keysWith(prefix){ var a = []; try{ for(var i=0;i<localStorage.length;i++){ var k = localStorage.key(i); if(k.indexOf(prefix)===0) a.push(k.slice(prefix.length)); } }catch(e){} Object.keys(mem).forEach(function(k){ if(k.indexOf(prefix)===0 && a.indexOf(k.slice(prefix.length))<0) a.push(k.slice(prefix.length)); }); return a.sort(); }
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 
   // ---------- 台北時間的週一 ----------
-  function taipeiNow(){ return new Date(Date.now() + 8*3600*1000); } // 用 UTC 欄位讀取即為台北時間
-  function mondayOf(d){ var x = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())); var wd = (x.getUTCDay()+6)%7; x.setUTCDate(x.getUTCDate()-wd); return x; }
+  function taipeiNow(){ return new Date(Date.now() + 8*3600*1000); }
+  function mondayOf(d){ var x = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())); x.setUTCDate(x.getUTCDate() - (x.getUTCDay()+6)%7); return x; }
   function iso(d){ return d.toISOString().slice(0,10); }
+  function addDays(d, n){ var x = new Date(d); x.setUTCDate(x.getUTCDate()+n); return x; }
   function md(d){ return (d.getUTCMonth()+1) + '/' + d.getUTCDate(); }
-  function rangeLabel(mon){ var s = new Date(mon); s.setUTCDate(s.getUTCDate()+6); return md(mon) + ' – ' + md(s); }
-  var week, weekKey;
-  function refreshWeek(){ week = mondayOf(taipeiNow()); weekKey = iso(week); }
+  function rangeLabel(mon){ return md(mon) + ' – ' + md(addDays(mon, 6)); }
+  function fromKey(k){ return new Date(k + 'T00:00:00Z'); }
+  var week, weekKey, nextKey;
+  function refreshWeek(){ week = mondayOf(taipeiNow()); weekKey = iso(week); nextKey = iso(addDays(week, 7)); }
   refreshWeek();
 
-  // ---------- 蕃薯章 ----------
-  var BODY = 'M32 12C42 12 50 26 49 40 48 52 40 56 32 56S16 52 15 40C14 26 22 12 32 12Z';
-  var SKIN = 'M15.4 37C20 33.5 26 40.5 32 37S44 33.5 48.6 37C48 51 40 56 32 56S16 51 15.4 37Z';
-  function potato(face, extraBack, extraFront){
-    return '<circle cx="32" cy="32" r="30" fill="#FFF1D6"/>' + (extraBack||'') +
-      '<path d="'+BODY+'" fill="#F2B64E"/><path d="'+SKIN+'" fill="#5A2238"/>' +
-      '<path d="M23 45l1.3 2.2M31 49l.8 2.6M39 46l1.3 2.2" stroke="#2B1E22" stroke-width="1.7" stroke-linecap="round"/>' +
-      face + '<path d="'+BODY+'" fill="none" stroke="#2B1E22" stroke-width="2.2" stroke-linejoin="round"/>' + (extraFront||'');
-  }
-  var FACE_SMILE = '<circle cx="27.5" cy="26" r="1.7" fill="#2B1E22"/><circle cx="36.5" cy="26" r="1.7" fill="#2B1E22"/><path d="M29 30.5c1.8 2.4 4.2 2.4 6 0" fill="none" stroke="#2B1E22" stroke-width="1.5" stroke-linecap="round"/>';
-  var FACE_YUM = '<path d="M25.5 26.5q2-2 4 0M34.5 26.5q2-2 4 0" fill="none" stroke="#2B1E22" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="32" cy="31" rx="2.4" ry="2" fill="#2B1E22"/><ellipse cx="24" cy="30" rx="2.4" ry="1.4" fill="#F2A2A2"/><ellipse cx="40" cy="30" rx="2.4" ry="1.4" fill="#F2A2A2"/>';
-  var FACE_GRIT = '<path d="M25 24.5l4 1.5M39 24.5l-4 1.5" stroke="#2B1E22" stroke-width="1.5" stroke-linecap="round"/><circle cx="28" cy="27.5" r="1.5" fill="#2B1E22"/><circle cx="36" cy="27.5" r="1.5" fill="#2B1E22"/><path d="M29 31.5h6" stroke="#2B1E22" stroke-width="1.6" stroke-linecap="round"/><path d="M45 20q1.5 2.5 0 3.5q-1.5-1 0-3.5z" fill="#8EC5E8"/>';
-  var STAMPS = {
-    // 加餐：抱著飯碗、筷子
-    snack: potato(FACE_YUM, '',
-      '<path d="M18 44h28a14 9 0 0 1-28 0z" fill="#fff" stroke="#2B1E22" stroke-width="2" stroke-linejoin="round"/>' +
-      '<path d="M21 44q3-4 6 0q3-4 5 0q3-4 6 0q3-4 5 0" fill="#fff" stroke="#2B1E22" stroke-width="1.6" stroke-linejoin="round"/>' +
-      '<path d="M41 33l10-8M44 35l10-7" stroke="#2B1E22" stroke-width="2" stroke-linecap="round"/>'),
-    // 重訓：舉啞鈴過頭
-    lift: potato(FACE_GRIT,
-      '<path d="M17 30l-3-14M47 30l3-14" stroke="#2B1E22" stroke-width="2.2" stroke-linecap="round"/>' +
-      '<path d="M8 14h48" stroke="#2B1E22" stroke-width="2.6" stroke-linecap="round"/>' +
-      '<rect x="5" y="8" width="6" height="12" rx="2" fill="#6B2F45" stroke="#2B1E22" stroke-width="1.8"/>' +
-      '<rect x="53" y="8" width="6" height="12" rx="2" fill="#6B2F45" stroke="#2B1E22" stroke-width="1.8"/>', ''),
-    // 晨重：站在體重計上
-    weigh: '<circle cx="32" cy="32" r="30" fill="#FFF1D6"/>' +
-      '<g transform="translate(0 -5)"><path d="'+BODY+'" fill="#F2B64E"/><path d="'+SKIN+'" fill="#5A2238"/>' + FACE_SMILE +
-      '<path d="'+BODY+'" fill="none" stroke="#2B1E22" stroke-width="2.2" stroke-linejoin="round"/></g>' +
-      '<rect x="12" y="49" width="40" height="9" rx="3" fill="#fff" stroke="#2B1E22" stroke-width="2"/>' +
-      '<path d="M28 53.5h8" stroke="#6B2F45" stroke-width="2" stroke-linecap="round"/>' +
-      '<path d="M50 14l3-3M53 20h4M46 10l1-4" stroke="#C46A2B" stroke-width="2" stroke-linecap="round"/>'
+  // ---------- 地瓜插畫 ----------
+  var LINE = '#5A3A22';
+  var BODY = 'M50 15C71 13 87 31 86 55C85 77 69 89 50 89S15 77 14 56C13 33 29 17 50 15Z';
+  var FLESH = 'M15.5 50C17 30 31 17 50 15C69 13 84 28 85.6 49C80 53 75 46 69 51C63 56 57 47 50.5 52C44 57 38 48 32 53C26 57 21 50 15.5 50Z';
+  var FACES = {
+    smile: '<circle cx="41" cy="35" r="2.8" fill="'+LINE+'"/><circle cx="59" cy="35" r="2.8" fill="'+LINE+'"/><path d="M44 41q6 6 12 0" fill="none" stroke="'+LINE+'" stroke-width="2.6" stroke-linecap="round"/>',
+    happy: '<path d="M37 36q4-4.5 8 0M55 36q4-4.5 8 0" fill="none" stroke="'+LINE+'" stroke-width="2.6" stroke-linecap="round"/><path d="M43.5 40.5h13q-1 9-6.5 9t-6.5-9z" fill="#B5473A" stroke="'+LINE+'" stroke-width="2.2" stroke-linejoin="round"/>',
+    grit: '<path d="M36 29.5l8 3M64 29.5l-8 3" stroke="'+LINE+'" stroke-width="2.6" stroke-linecap="round"/><circle cx="42" cy="36" r="2.6" fill="'+LINE+'"/><circle cx="58" cy="36" r="2.6" fill="'+LINE+'"/><path d="M45 41.5h10q-1.5 6-5 6t-5-6z" fill="#B5473A" stroke="'+LINE+'" stroke-width="2.2" stroke-linejoin="round"/>',
+    sleep: '<path d="M37 36q4 3 8 0M55 36q4 3 8 0" fill="none" stroke="'+LINE+'" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="50" cy="43" rx="2.6" ry="2" fill="'+LINE+'"/>'
   };
-  function emptyCell(n){ return '<circle cx="32" cy="32" r="28" fill="#FAF6F0" stroke="#D9CFC6" stroke-width="2" stroke-dasharray="4 4"/><text x="32" y="37.5" text-anchor="middle" font-family="Poppins,sans-serif" font-size="15" font-weight="700" fill="#7A6A6E">'+n+'</text>'; }
+  function potato(face){
+    return '<path d="'+BODY+'" fill="url(#gSkin)"/>' +
+      '<path d="'+FLESH+'" fill="url(#gFlesh)"/>' +
+      '<ellipse cx="38" cy="24" rx="9" ry="4" fill="#fff" opacity=".4" transform="rotate(-25 38 24)"/>' +
+      '<path d="M28 64l2 3M44 76l1.5 3.5M62 70l2 3M35 81l1 3M72 61l1.5 2.5" stroke="#6B3A1E" stroke-width="2.4" stroke-linecap="round" opacity=".75"/>' +
+      '<ellipse cx="33.5" cy="42" rx="4.6" ry="2.7" fill="#F29A86" opacity=".8"/><ellipse cx="66.5" cy="42" rx="4.6" ry="2.7" fill="#F29A86" opacity=".8"/>' +
+      FACES[face||'smile'] +
+      '<path d="'+BODY+'" fill="none" stroke="'+LINE+'" stroke-width="3.2" stroke-linejoin="round"/>';
+  }
+  function sparkle(cx, cy, r){ return '<path d="M'+cx+' '+(cy-r)+'Q'+cx+' '+cy+' '+(cx+r)+' '+cy+'Q'+cx+' '+cy+' '+cx+' '+(cy+r)+'Q'+cx+' '+cy+' '+(cx-r)+' '+cy+'Q'+cx+' '+cy+' '+cx+' '+(cy-r)+'Z" fill="#F6C64A" stroke="#D99A26" stroke-width="1.4" stroke-linejoin="round"/>'; }
+  function at(tx, ty, s, inner){ return '<g transform="translate('+tx+' '+ty+') scale('+s+')">'+inner+'</g>'; }
+  var ACT = '#E58B3A';
+  var ART = {
+    bowl: at(-3,-5,.9, potato('happy')) +
+      '<path d="M70 62L95 30M75 63L99 34" stroke="#8B5A2B" stroke-width="3.2" stroke-linecap="round"/>' +
+      '<path d="M44 66h48a24 18 0 0 1-48 0z" fill="#FFFDF7" stroke="'+LINE+'" stroke-width="2.8" stroke-linejoin="round"/>' +
+      '<path d="M47 66q3.5-6 7 0q3.5-6 7 0q3.5-6 7 0q3.5-6 7 0q3.5-6 7 0q3.5-6 7 0" fill="#fff" stroke="'+LINE+'" stroke-width="2" stroke-linejoin="round"/>' +
+      '<path d="M8 22l7 4M14 12l5 7M24 6l2 8" stroke="'+ACT+'" stroke-width="3" stroke-linecap="round"/>',
+    lift: at(8,8,.84, potato('grit')) +
+      '<rect x="14" y="58.5" width="14" height="5" fill="#8A8A8A"/><rect x="72" y="58.5" width="14" height="5" fill="#8A8A8A"/>' +
+      '<rect x="3" y="47" width="12" height="28" rx="4" fill="#9C9C9C" stroke="'+LINE+'" stroke-width="2.6"/>' +
+      '<rect x="85" y="47" width="12" height="28" rx="4" fill="#9C9C9C" stroke="'+LINE+'" stroke-width="2.6"/>' +
+      '<circle cx="27" cy="61" r="6" fill="#F8CB4E" stroke="'+LINE+'" stroke-width="2.4"/><circle cx="73" cy="61" r="6" fill="#F8CB4E" stroke="'+LINE+'" stroke-width="2.4"/>' +
+      '<path d="M24 10l3 6M50 3v7M76 10l-3 6" stroke="'+ACT+'" stroke-width="3" stroke-linecap="round"/>',
+    weigh: at(9,-1,.82, potato('smile')) +
+      '<rect x="12" y="76" width="76" height="17" rx="7" fill="#F1E9DD" stroke="'+LINE+'" stroke-width="2.8"/>' +
+      '<rect x="40" y="80" width="20" height="8" rx="3" fill="#fff" stroke="'+LINE+'" stroke-width="1.8"/><path d="M45 84h10" stroke="#A65A2C" stroke-width="1.8" stroke-linecap="round"/>' +
+      sparkle(88, 18, 7) + sparkle(12, 30, 5),
+    water: at(-4,2,.9, potato('smile')) +
+      '<rect x="62" y="48" width="25" height="42" rx="9" fill="#CFE6F2" stroke="'+LINE+'" stroke-width="2.8"/>' +
+      '<rect x="67" y="40" width="15" height="10" rx="3" fill="#9CCBE2" stroke="'+LINE+'" stroke-width="2.4"/>' +
+      '<path d="M66 64h17" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/>' +
+      '<path d="M88 12q5 7 0 11q-5-4 0-11z" fill="#8EC5E8" stroke="#5E9EC4" stroke-width="1.4"/>',
+    sleep: potato('sleep') +
+      '<path d="M7 62C30 51 72 51 95 63L93 93H9Z" fill="#F7D6CF" stroke="'+LINE+'" stroke-width="2.8" stroke-linejoin="round"/>' +
+      '<path d="M22 60v31M36 57v34M50 56v35M64 56v35M78 59v32M10 73h83M10 83h83" stroke="#EBA19A" stroke-width="1.5" opacity=".8"/>' +
+      '<text x="72" y="22" font-size="15" fill="'+LINE+'" font-family="Huninn,sans-serif">z</text><text x="82" y="13" font-size="19" fill="'+LINE+'" font-family="Huninn,sans-serif">z</text>',
+    stretch: '<path d="M4 88h92l-6 8H10z" fill="#F4A99C" stroke="'+LINE+'" stroke-width="2.4" stroke-linejoin="round"/>' +
+      '<g transform="translate(50 62) scale(1.15 .78) translate(-50 -56)">' + potato('smile') + '</g>' +
+      '<path d="M6 50l8 4M4 62h9M94 50l-8 4M96 62h-9" stroke="'+ACT+'" stroke-width="3" stroke-linecap="round"/>',
+    run: potato('smile') +
+      '<path d="M17.5 31C38 24 62 24 82.5 31L82 39C62 33 38 33 18 39Z" fill="#FFFDF7" stroke="'+LINE+'" stroke-width="2.4" stroke-linejoin="round"/>' +
+      '<path d="M18 33L3 26M18 37L4 42" stroke="'+LINE+'" stroke-width="2.4" stroke-linecap="round"/>' +
+      '<path d="M90 18q3 3 0 6q-3 3 0 6M96 22q3 3 0 6" fill="none" stroke="'+ACT+'" stroke-width="2.4" stroke-linecap="round"/>',
+    heart: at(-2,-6,.94, potato('smile')) +
+      '<path d="M50 90C33 79 27 70 31 62c3.5-7 12.5-7 19 1 6.5-8 15.5-8 19-1 4 8-2 17-19 28z" fill="#F28C80" stroke="'+LINE+'" stroke-width="2.6" stroke-linejoin="round"/>' +
+      '<path d="M43 66q2-3 5-2" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>' +
+      '<path d="M86 14c-4-3-7-1-6 2 1 3 6 6 6 6s5-3 6-6c1-3-2-5-6-2z" fill="#F28C80"/>',
+    plan: at(20,10,.8, potato('smile')) +
+      '<rect x="4" y="30" width="38" height="52" rx="6" fill="#FFFDF7" stroke="'+LINE+'" stroke-width="2.6"/>' +
+      '<rect x="15" y="25" width="16" height="9" rx="3" fill="#CFC6BB" stroke="'+LINE+'" stroke-width="2"/>' +
+      '<path d="M10 47l3 3 5-6M10 62l3 3 5-6" fill="none" stroke="'+ACT+'" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="M23 48h13M23 63h13M10 74h26" stroke="#CDB9A3" stroke-width="2.2" stroke-linecap="round"/>',
+    star: potato('smile') + sparkle(86, 16, 8) + sparkle(13, 22, 6) + sparkle(92, 40, 4.5)
+  };
+  var ICON_LABEL = { bowl:'飲食', lift:'重訓', weigh:'體重', water:'補水', sleep:'睡眠', stretch:'伸展', run:'有氧', heart:'身心', plan:'計畫', star:'其他' };
+  function art(key, size, label){
+    return '<svg viewBox="0 0 100 100" width="'+size+'" height="'+size+'" '+(label?'role="img" aria-label="'+esc(label)+'"':'aria-hidden="true"')+' style="display:block;overflow:visible"><g filter="url(#wob)">'+(ART[key]||ART.star)+'</g></svg>';
+  }
+  function stampSvg(key, label, bonus){
+    return '<svg viewBox="0 0 100 100" role="img" aria-label="'+label+'"><g filter="url(#wob)"><circle cx="50" cy="50" r="48" fill="'+(bonus?'#FBDDBF':'#FCEBC0')+'"/>' + at(8,8,.84, ART[key]||ART.star) + '</g></svg>';
+  }
+  function emptySvg(n){ return '<svg viewBox="0 0 100 100" role="img" aria-label="第 '+n+' 格未蓋章"><circle cx="50" cy="50" r="45" fill="#FBF4E8" stroke="#DCC7AC" stroke-width="3" stroke-dasharray="7 7"/><text x="50" y="59" text-anchor="middle" font-family="Huninn,sans-serif" font-size="26" fill="#80634B">'+n+'</text></svg>'; }
 
-  // ---------- 任務 ----------
-  var TASKS = [
-    { id:'snack', title:'多吃一份加餐', goal:7, tint:'var(--peach)', when:'吃完一份額外加餐後打卡',
-      icon:'<svg viewBox="0 0 64 64" width="38" height="38" aria-hidden="true">'+STAMPS.snack+'</svg>',
+  // ---------- 習慣 ----------
+  var DEFAULT_HABITS = [
+    { id:'snack', title:'多吃一份加餐', goal:7, icon:'bowl', when:'吃完一份額外加餐後打卡',
       how:'在三餐之外多吃一份，用平常吃得習慣的食材就好，例如地瓜配蛋、白飯加橄欖油。\n吃完再按蓋章。' },
-    { id:'lift', title:'上半身重訓', goal:2, tint:'var(--lilac)', when:'完成一次訓練後打卡，兩次至少隔一天',
-      icon:'<svg viewBox="0 0 64 64" width="38" height="38" aria-hidden="true">'+STAMPS.lift+'</svg>',
+    { id:'lift', title:'上半身重訓', goal:2, icon:'lift', when:'完成一次訓練後打卡，兩次至少隔一天',
       how:'推、拉、肩各挑一個動作，每個動作 3 組 8–12 下。\n兩次訓練之間至少休息一天，讓肌肉有時間恢復。' },
-    { id:'weigh', title:'量晨重', goal:3, tint:'var(--cream)', when:'起床上完廁所、早餐前量體重後打卡',
-      icon:'<svg viewBox="0 0 64 64" width="38" height="38" aria-hidden="true">'+STAMPS.weigh+'</svg>',
-      how:'固定同一台體重計、穿差不多的衣服。\n這裡只記錄量了幾次，體重數字和平均值請自行記錄。' }
+    { id:'weigh', title:'量晨重', goal:3, icon:'weigh', when:'起床上完廁所、早餐前量體重後打卡',
+      how:'固定同一台體重計、穿差不多的衣服。\n這裡只記錄量了幾次，平均體重可以填在「8 週計畫」。' }
   ];
-  var openHow = {};
-  var lastStamped = null;
+  function clone(x){ return JSON.parse(JSON.stringify(x)); }
+  // 某週的習慣清單：有存就用；沒存就沿用之前最近一週的設定，沒有就用預設
+  function habitsFor(key){
+    var own = load('bd:habits:'+key, null);
+    if(own) return own;
+    var earlier = keysWith('bd:habits:').filter(function(k){ return k < key; });
+    var list = earlier.length ? load('bd:habits:'+earlier[earlier.length-1], null) : null;
+    list = clone(list || DEFAULT_HABITS);
+    if(key === weekKey) save('bd:habits:'+key, list); // 本週開始後固定下來，之後的規劃不會改到它
+    return list;
+  }
+  function weekState(key){ return load('bd:week:'+(key||weekKey), { counts:{}, undo:{} }); }
+  function weekDone(key){ var st = weekState(key), hs = habitsFor(key), d = 0; hs.forEach(function(h){ if((st.counts[h.id]||0) >= h.goal) d++; }); return { done:d, total:hs.length }; }
 
-  function weekState(){ return load('bd:week:'+weekKey, { counts:{}, undo:{} }); }
-
+  // ---------- 本週 ----------
+  var openHow = {}, lastStamped = null;
   function renderHome(){
     refreshWeek();
     document.getElementById('weekLabel').textContent = rangeLabel(week);
-    var st = weekState(), done = 0, html = '';
-    TASKS.forEach(function(t){
-      var n = Math.max(0, Math.min(t.goal, st.counts[t.id]||0));
-      var isDone = n >= t.goal; if(isDone) done++;
-      var canUndo = !!st.undo[t.id] && n > 0;
-      var cells = '';
-      for(var i=0;i<t.goal;i++){
-        var rot = ((i*37)%13)-6;
-        var pop = (lastStamped === t.id && i === n-1) ? ' pop' : '';
+    document.getElementById('heroArt').innerHTML = art('star', 108, '開心的地瓜');
+    var hs = habitsFor(weekKey), st = weekState(), done = 0, html = '';
+    hs.forEach(function(h){
+      var n = Math.max(0, st.counts[h.id]||0), isDone = n >= h.goal; if(isDone) done++;
+      var canUndo = !!st.undo[h.id] && n > 0, cells = '';
+      var shown = Math.max(h.goal, n);
+      for(var i=0;i<shown;i++){
+        var rot = ((i*37)%13)-6, bonus = i >= h.goal, pop = (lastStamped === h.id && i === n-1) ? ' pop' : '';
         cells += i < n
-          ? '<div class="cell'+pop+'" style="--r:'+rot+'deg"><svg viewBox="0 0 64 64" role="img" aria-label="第 '+(i+1)+' 格已蓋章" style="transform:rotate('+rot+'deg)">'+STAMPS[t.id]+'</svg></div>'
-          : '<div class="cell"><svg viewBox="0 0 64 64" role="img" aria-label="第 '+(i+1)+' 格未蓋章">'+emptyCell(i+1)+'</svg></div>';
+          ? '<div class="cell'+pop+'" style="--r:'+rot+'deg"><span style="display:block;transform:rotate('+rot+'deg)">'+stampSvg(h.icon, '第 '+(i+1)+' 格已蓋章'+(bonus?'（加碼）':''), bonus)+'</span>'+(bonus?'<span class="plus" aria-hidden="true">+</span>':'')+'</div>'
+          : '<div class="cell">'+emptySvg(i+1)+'</div>';
       }
-      var undoBtn = '<button class="btn btn-ghost" data-undo="'+t.id+'"'+(canUndo?'':' disabled')+'>撤回</button>';
-      var action = isDone
-        ? '<div class="done-bar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>本週已達成</div>'
-        : '<button class="btn btn-main" data-stamp="'+t.id+'">蓋章</button>';
-      var o = !!openHow[t.id];
+      var o = !!openHow[h.id];
       html += '<article class="card">' +
-        '<div class="card-head"><div class="row" style="gap:12px"><div class="icon" style="background:'+t.tint+'">'+t.icon+'</div>' +
-        '<div><h2>'+t.title+'</h2><p class="sub">'+t.when+'</p></div></div>' +
-        '<div><div class="prog num" style="color:'+(isDone?'var(--plum-ink)':'var(--ink)')+'">'+n+' / '+t.goal+'</div><div class="sub" style="font-size:11px;text-align:right">每週 '+t.goal+' 次</div></div></div>' +
+        '<div class="habit-head"><span class="habit-icon">'+art(h.icon, 50)+'</span>' +
+        '<div style="flex:1;min-width:0"><h2>'+esc(h.title)+'</h2>'+(h.when?'<p class="sub">'+esc(h.when)+'</p>':'')+'</div>' +
+        '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="count">'+n+' / '+h.goal+'</span>' +
+        (isDone ? (n > h.goal ? '<span class="bonus-tag">加碼 +'+(n-h.goal)+'</span>' : '<span class="done-tag">達成</span>') : '<span class="sub" style="font-size:11px">每週 '+h.goal+' 次</span>') + '</div></div>' +
         '<div class="cells">'+cells+'</div>' +
-        '<div class="row">'+action+undoBtn+'</div>' +
-        '<button class="link" data-how="'+t.id+'" aria-expanded="'+o+'">'+(o?'收起做法':'查看做法')+
-        '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform:rotate('+(o?180:0)+'deg)"><path d="M6 9l6 6 6-6"/></svg></button>' +
-        (o ? '<p class="how" style="background:'+t.tint+'">'+t.how+'</p>' : '') +
+        '<div class="row"><button class="btn btn-main" data-stamp="'+h.id+'">'+(isDone?'再蓋一個':'蓋章')+'</button>' +
+        '<button class="btn btn-ghost" data-undo="'+h.id+'"'+(canUndo?'':' disabled')+'>撤回</button></div>' +
+        (h.how ? '<button class="link" data-how="'+h.id+'" aria-expanded="'+o+'">'+(o?'收起做法':'查看做法')+'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform:rotate('+(o?180:0)+'deg)"><path d="M6 9l6 6 6-6"/></svg></button>' + (o ? '<p class="how">'+esc(h.how)+'</p>' : '') : '') +
         '</article>';
     });
     document.getElementById('cards').innerHTML = html;
     document.getElementById('doneCount').textContent = done;
+    document.getElementById('habitTotal').textContent = '/ ' + hs.length + ' 項';
     document.getElementById('planLine').textContent = planHeadline();
-    var cw = planWeekOf(weekKey);
-    document.getElementById('planShort').textContent = (cw>=1 && cw<=PLAN.weeks) ? '第 '+cw+' 週 · 本週目標 '+targetAt(cw)+' kg' : '49 → 52.2 kg';
+    var nx = load('bd:habits:'+nextKey, null);
+    document.getElementById('nextShort').textContent = rangeLabel(addDays(week,7)) + (nx ? ' · 已規劃 '+nx.length+' 個習慣' : ' · 目前沿用本週');
+    document.getElementById('nextArt').innerHTML = art('plan', 42);
     lastStamped = null;
-    var sh = shopState(), tot = allItems(sh).length, rd = allItems(sh).filter(function(n){return sh.checked[n];}).length;
-    document.getElementById('shopShort').textContent = '已備妥 ' + rd + ' / ' + tot + ' 項';
   }
-
   document.getElementById('cards').addEventListener('click', function(e){
     var b = e.target.closest('button'); if(!b) return;
-    var st = weekState();
+    var st = weekState(), hs = habitsFor(weekKey);
     if(b.dataset.stamp){
-      var t = TASKS.filter(function(x){return x.id===b.dataset.stamp;})[0];
-      var n = st.counts[t.id]||0; if(n >= t.goal) return;
-      st.counts[t.id] = n+1; st.undo[t.id] = true; save('bd:week:'+weekKey, st);
-      lastStamped = t.id; renderHome();
-      if(n+1 === t.goal) toast(t.title + ' 本週達成！');
+      var h = hs.filter(function(x){ return x.id === b.dataset.stamp; })[0]; if(!h) return;
+      var n = (st.counts[h.id]||0) + 1;
+      st.counts[h.id] = n; st.undo[h.id] = true; save('bd:week:'+weekKey, st);
+      lastStamped = h.id; renderHome();
+      if(n === h.goal) toast(h.title + ' 本週達成！'); else if(n > h.goal) toast('加碼 +' + (n-h.goal) + '，好棒');
     } else if(b.dataset.undo){
-      var id = b.dataset.undo; if(!st.undo[id] || !(st.counts[id]>0)) return;
+      var id = b.dataset.undo; if(!st.undo[id] || !(st.counts[id] > 0)) return;
       st.counts[id]--; st.undo[id] = false; save('bd:week:'+weekKey, st); renderHome();
     } else if(b.dataset.how){
       openHow[b.dataset.how] = !openHow[b.dataset.how]; renderHome();
     }
   });
 
+  // ---------- 規劃下週 ----------
+  var newGoal = 3, newIcon = 'water';
+  function nextHabits(){ return load('bd:habits:'+nextKey, null) || clone(habitsFor(weekKey)); }
+  function saveNext(list){ save('bd:habits:'+nextKey, list); }
+  function renderNext(){
+    refreshWeek();
+    document.getElementById('nextRange').textContent = rangeLabel(addDays(week,7)) + ' · 第 ' + planWeekOf(nextKey) + ' 週';
+    var list = nextHabits();
+    document.getElementById('nextList').innerHTML = list.length ? list.map(function(h, i){
+      return '<div class="card" style="flex-direction:row;align-items:center;padding:12px 14px;gap:10px">' +
+        '<span class="habit-icon" style="width:52px;height:52px;border-radius:16px">'+art(h.icon, 44)+'</span>' +
+        '<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span class="r" style="font-size:16px">'+esc(h.title)+'</span><span class="sub">每週 '+h.goal+' 次</span></span>' +
+        '<button class="icon-btn" data-g="'+i+'" data-d="-1" aria-label="'+esc(h.title)+' 減少一次"'+(h.goal<=1?' disabled':'')+'>−</button>' +
+        '<button class="icon-btn" data-g="'+i+'" data-d="1" aria-label="'+esc(h.title)+' 增加一次"'+(h.goal>=14?' disabled':'')+'>+</button>' +
+        '<button class="del" data-rm="'+i+'" aria-label="移除 '+esc(h.title)+'">×</button></div>';
+    }).join('') : '<p class="sub" style="text-align:center;padding:12px">下週還沒有習慣，從下面新增一個吧。</p>';
+    document.getElementById('resetNext').hidden = !load('bd:habits:'+nextKey, null);
+    document.getElementById('goalVal').textContent = newGoal + ' 次';
+    document.getElementById('picker').innerHTML = Object.keys(ART).map(function(k){
+      return '<label class="pick"><input type="radio" name="icon" value="'+k+'"'+(k===newIcon?' checked':'')+'>'+art(k, 40)+ICON_LABEL[k]+'</label>';
+    }).join('');
+  }
+  document.getElementById('nextList').addEventListener('click', function(e){
+    var b = e.target.closest('button'); if(!b) return;
+    var list = nextHabits();
+    if(b.dataset.rm != null){ var r = list.splice(+b.dataset.rm, 1)[0]; saveNext(list); renderNext(); toast('已從下週移除「' + r.title + '」'); }
+    else if(b.dataset.g != null){ var h = list[+b.dataset.g]; h.goal = Math.max(1, Math.min(14, h.goal + (+b.dataset.d))); saveNext(list); renderNext(); }
+  });
+  document.getElementById('resetNext').addEventListener('click', function(){
+    try{ localStorage.removeItem('bd:habits:'+nextKey); }catch(e){} delete mem['bd:habits:'+nextKey]; renderNext(); toast('下週改回和本週一樣');
+  });
+  document.getElementById('goalMinus').addEventListener('click', function(){ newGoal = Math.max(1, newGoal-1); document.getElementById('goalVal').textContent = newGoal + ' 次'; });
+  document.getElementById('goalPlus').addEventListener('click', function(){ newGoal = Math.min(14, newGoal+1); document.getElementById('goalVal').textContent = newGoal + ' 次'; });
+  document.getElementById('picker').addEventListener('change', function(e){ if(e.target.name === 'icon') newIcon = e.target.value; });
+  document.getElementById('habitForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = document.getElementById('hName').value.trim(); if(!name) return;
+    var list = nextHabits();
+    list.push({ id:'h'+Date.now().toString(36), title:name, goal:newGoal, icon:newIcon, when:document.getElementById('hWhen').value.trim(), how:'' });
+    saveNext(list);
+    document.getElementById('hName').value = ''; document.getElementById('hWhen').value = '';
+    renderNext(); toast('已加到下週：' + name);
+  });
+
+  // ---------- 8 週計畫 ----------
+  var PLAN = { start:'2026-11-23', weeks:8, from:49, to:52.2 };
+  function planMonday(i){ return addDays(fromKey(PLAN.start), (i-1)*7); }
+  function planWeekOf(key){ return Math.floor((fromKey(key) - fromKey(PLAN.start)) / (7*864e5)) + 1; }
+  function targetAt(i){ return Math.round((PLAN.from + (PLAN.to-PLAN.from) * i / PLAN.weeks) * 10) / 10; }
+  function planHeadline(){
+    var w = planWeekOf(weekKey);
+    if(w < 1) return '8 週計畫尚未開始';
+    if(w > PLAN.weeks) return '8 週計畫已完成';
+    return '8 週計畫第 ' + w + ' 週 · 目標 ' + targetAt(w) + ' kg';
+  }
+  function renderPlan(){
+    refreshWeek();
+    var cur = planWeekOf(weekKey);
+    document.getElementById('planArt').innerHTML = art('weigh', 70);
+    document.getElementById('planRange').textContent = md(planMonday(1)) + ' – ' + md(addDays(planMonday(PLAN.weeks), 6));
+    document.getElementById('planWeekBadge').textContent = cur < 1 ? '尚未開始' : cur > PLAN.weeks ? '已完成' : '第 ' + cur + ' / ' + PLAN.weeks + ' 週';
+    var latest = null;
+    for(var i=1;i<=PLAN.weeks;i++){ var v = load('bd:wt:'+iso(planMonday(i)), null); if(v) latest = v; }
+    var pct = latest ? (latest-PLAN.from)/(PLAN.to-PLAN.from) : (cur-1)/PLAN.weeks;
+    document.getElementById('planBar').style.width = (Math.max(0, Math.min(1, pct))*100).toFixed(0) + '%';
+    document.getElementById('planPace').textContent = latest
+      ? '最近一週平均 ' + latest + ' kg，已增加 ' + (Math.round((latest-PLAN.from)*10)/10) + ' kg'
+      : '每週約 +0.4 kg，填入每週平均晨重就能看到進度';
+    document.getElementById('wtInput').value = load('bd:wt:'+weekKey, '') || '';
+
+    var W = 320, H = 150, pl = 34, pr = 10, pt = 10, pb = 24, lo = 48.5, hi = 52.7;
+    function x(i){ return pl + (W-pl-pr) * i / PLAN.weeks; }
+    function y(v){ return pt + (H-pt-pb) * (hi - v) / (hi - lo); }
+    var s = '<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="目標體重與每週平均體重走勢">';
+    [49,50,51,52].forEach(function(v){ s += '<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="#F0E2CF"/><text x="'+(pl-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="10" fill="#80634B">'+v+'</text>'; });
+    for(var j=0;j<=PLAN.weeks;j++) s += '<text x="'+x(j)+'" y="'+(H-6)+'" text-anchor="middle" font-size="10" fill="#80634B">'+(j===0?'起':j)+'</text>';
+    s += '<line x1="'+x(0)+'" y1="'+y(PLAN.from)+'" x2="'+x(PLAN.weeks)+'" y2="'+y(PLAN.to)+'" stroke="#D9B07E" stroke-width="2" stroke-dasharray="5 5"/>';
+    var pts = [[0, PLAN.from]];
+    for(var k=1;k<=PLAN.weeks;k++){ var vv = load('bd:wt:'+iso(planMonday(k)), null); if(vv) pts.push([k, Math.max(lo, Math.min(hi, vv))]); }
+    if(pts.length > 1) s += '<polyline fill="none" stroke="#A65A2C" stroke-width="2.5" stroke-linejoin="round" points="'+pts.map(function(p){ return x(p[0])+','+y(p[1]); }).join(' ')+'"/>';
+    pts.forEach(function(p){ s += '<circle cx="'+x(p[0])+'" cy="'+y(p[1])+'" r="4.5" fill="#A65A2C" stroke="#fff" stroke-width="1.5"/>'; });
+    document.getElementById('chart').innerHTML = s + '</svg>';
+
+    var html = '';
+    for(var n=1;n<=PLAN.weeks;n++){
+      var key = iso(planMonday(n)), isCur = n === cur, future = n > cur, wt = load('bd:wt:'+key, null);
+      var r = future ? null : weekDone(key), dots = '';
+      if(r) for(var m=0;m<r.total;m++) dots += '<i style="background:'+(m<r.done?'#A65A2C':'#EFE1CD')+'"></i>';
+      html += '<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:18px;background:'+(isCur?'var(--butter)':'var(--card)')+';border:1.5px solid '+(isCur?'#F2D899':'#F1E3CF')+';opacity:'+(future?.7:1)+'">' +
+        '<span class="r" style="width:34px;height:34px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:15px;background:'+(isCur?'var(--brown)':'var(--bg)')+';color:'+(isCur?'#fff':'var(--ink)')+'">'+n+'</span>' +
+        '<span style="flex:1;display:flex;flex-direction:column;gap:2px"><b style="font-size:14px">'+rangeLabel(planMonday(n))+(isCur?' · 本週':'')+'</b><span class="sub">目標 '+targetAt(n)+' kg'+(wt?' · 實際 '+wt+' kg':'')+'</span></span>' +
+        (r ? '<span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="dots">'+dots+'</span><span class="sub" style="font-size:11px">達成 '+r.done+' / '+r.total+'</span></span>' : '') +
+        '</div>';
+    }
+    document.getElementById('weekList').innerHTML = html;
+  }
+  document.getElementById('wtInput').addEventListener('change', function(e){
+    var v = parseFloat(e.target.value);
+    if(isNaN(v)){ try{ localStorage.removeItem('bd:wt:'+weekKey); }catch(_){} delete mem['bd:wt:'+weekKey]; }
+    else save('bd:wt:'+weekKey, Math.round(v*10)/10);
+    renderPlan(); toast('已記下本週平均');
+  });
+
+  // ---------- 過去紀錄 ----------
+  function renderHistory(){
+    refreshWeek();
+    var keys = keysWith('bd:week:').concat(keysWith('bd:habits:')).filter(function(k){ return k <= weekKey; });
+    if(keys.indexOf(weekKey) < 0) keys.push(weekKey);
+    keys = keys.filter(function(k, i){ return keys.indexOf(k) === i; }).sort().reverse();
+    document.getElementById('histList').innerHTML = keys.map(function(k){
+      var hs = habitsFor(k), st = weekState(k), r = weekDone(k), wt = load('bd:wt:'+k, null), pw = planWeekOf(k);
+      var rows = hs.map(function(h){
+        var n = st.counts[h.id]||0, dots = '';
+        for(var i=0;i<Math.max(h.goal, n);i++) dots += '<i style="background:'+(i<n?(i>=h.goal?'#E58B3A':'#A65A2C'):'#EFE1CD')+'"></i>';
+        return '<div class="hist-row"><span style="flex:none">'+art(h.icon, 36)+'</span><span style="flex:1;min-width:0;font-size:14px">'+esc(h.title)+'</span>' +
+          '<span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="dots">'+dots+'</span><span class="sub" style="font-size:11px">'+n+' / '+h.goal+(n>h.goal?' · 加碼 +'+(n-h.goal):'')+'</span></span></div>';
+      }).join('');
+      return '<article class="card" style="gap:6px">' +
+        '<div class="row" style="justify-content:space-between"><span class="r" style="font-size:17px">'+rangeLabel(fromKey(k))+(k===weekKey?' · 本週':'')+'</span>' +
+        '<span class="done-tag" style="background:'+(r.done===r.total&&r.total?'var(--yellow)':'var(--pill)')+'">達成 '+r.done+' / '+r.total+'</span></div>' +
+        ((pw>=1&&pw<=PLAN.weeks)||wt ? '<p class="sub">'+(pw>=1&&pw<=PLAN.weeks?'8 週計畫第 '+pw+' 週':'')+(wt?' · 平均晨重 '+wt+' kg':'')+'</p>' : '') +
+        rows + '</article>';
+    }).join('') + (keys.length <= 1 ? '<p class="foot">下週一之後，這裡就會出現上一週的紀錄。</p>' : '');
+  }
+
   // ---------- 採買 ----------
   var BASE = [
-    { name:'主食', tint:'#FFF9DB', dot:'#D9A400', items:['白米','藜麥','地瓜'] },
-    { name:'蛋白質', tint:'#FFE9E9', dot:'#E05B5B', items:['雞蛋','新鮮去骨雞腿'] },
-    { name:'蔬果', tint:'#FBEBC8', dot:'#C46A2B', items:['紅蘿蔔','蘋果','藍莓'] },
-    { name:'加餐常備', tint:'#FFF4E6', dot:'#F2B64E', items:['橄欖油'] }
+    { name:'主食', items:['白米','藜麥','地瓜'] },
+    { name:'蛋白質', items:['雞蛋','新鮮去骨雞腿'] },
+    { name:'蔬果', items:['紅蘿蔔','蘋果','藍莓'] },
+    { name:'加餐常備', items:['橄欖油'] }
   ];
   function shopState(){ return load('bd:shop', { checked:{}, extra:[] }); }
-  function allItems(s){ var a=[]; BASE.forEach(function(g){a=a.concat(g.items);}); return a.concat(s.extra); }
-  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function allItems(s){ var a = []; BASE.forEach(function(g){ a = a.concat(g.items); }); return a.concat(s.extra); }
   function renderShop(){
     var s = shopState(), groups = BASE.slice();
-    if(s.extra.length) groups.push({ name:'自己加的', tint:'#EEE6F2', dot:'#6B2F45', items:s.extra, custom:true });
-    var html = '';
-    groups.forEach(function(g){
-      var n = g.items.filter(function(x){return s.checked[x];}).length;
-      html += '<div style="display:flex;flex-direction:column;gap:8px"><div class="group-h"><span class="dot" style="background:'+g.tint+'"><i style="background:'+g.dot+'"></i></span><h2>'+g.name+'</h2><span class="num sub" style="font-size:13px;font-weight:700">'+n+' / '+g.items.length+'</span></div><div class="items">';
-      g.items.forEach(function(it){
-        var on = !!s.checked[it];
-        html += '<label class="item'+(on?' on':'')+'"><input type="checkbox" data-item="'+esc(it)+'"'+(on?' checked':'')+'><span class="name">'+esc(it)+'</span>'+(on?'<span class="tag">已備妥</span>':'')+
-          (g.custom?'<button type="button" class="del" data-del="'+esc(it)+'" aria-label="刪除 '+esc(it)+'">×</button>':'')+'</label>';
-      });
-      html += '</div></div>';
-    });
-    document.getElementById('groups').innerHTML = html;
-    var all = allItems(s), rd = all.filter(function(x){return s.checked[x];}).length;
+    if(s.extra.length) groups.push({ name:'自己加的', items:s.extra, custom:true });
+    document.getElementById('groups').innerHTML = groups.map(function(g){
+      var n = g.items.filter(function(x){ return s.checked[x]; }).length;
+      return '<div style="display:flex;flex-direction:column;gap:8px"><div class="group-h"><h2>'+g.name+'</h2><span class="sub">'+n+' / '+g.items.length+'</span></div><div class="items">' +
+        g.items.map(function(it){
+          var on = !!s.checked[it];
+          return '<label class="item'+(on?' on':'')+'"><input type="checkbox" data-item="'+esc(it)+'"'+(on?' checked':'')+'><span class="name">'+esc(it)+'</span>'+(on?'<span class="tag">已備妥</span>':'')+
+            (g.custom?'<button type="button" class="del" data-del="'+esc(it)+'" aria-label="刪除 '+esc(it)+'">×</button>':'')+'</label>';
+        }).join('') + '</div></div>';
+    }).join('');
+    var all = allItems(s), rd = all.filter(function(x){ return s.checked[x]; }).length;
     document.getElementById('readyN').textContent = rd;
-    document.getElementById('totalN').textContent = '/ ' + all.length + ' 項';
+    document.getElementById('totalN').textContent = all.length;
     document.getElementById('clearShop').disabled = rd === 0;
+    document.querySelectorAll('.mealArt').forEach(function(el){ if(!el.innerHTML) el.innerHTML = art(el.dataset.art, 60); });
   }
   document.getElementById('groups').addEventListener('change', function(e){
     var k = e.target.dataset.item; if(k == null) return;
@@ -444,34 +621,29 @@ details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px
   document.getElementById('groups').addEventListener('click', function(e){
     var b = e.target.closest('[data-del]'); if(!b) return; e.preventDefault();
     var s = shopState(), k = b.dataset.del;
-    s.extra = s.extra.filter(function(x){return x!==k;}); delete s.checked[k]; save('bd:shop', s); renderShop();
+    s.extra = s.extra.filter(function(x){ return x !== k; }); delete s.checked[k]; save('bd:shop', s); renderShop();
   });
-  document.getElementById('clearShop').addEventListener('click', function(){
-    var s = shopState(); s.checked = {}; save('bd:shop', s); renderShop(); toast('已全部取消勾選');
-  });
+  document.getElementById('clearShop').addEventListener('click', function(){ var s = shopState(); s.checked = {}; save('bd:shop', s); renderShop(); toast('已全部取消勾選'); });
   document.getElementById('addForm').addEventListener('submit', function(e){
     e.preventDefault(); var inp = document.getElementById('addInput'), v = inp.value.trim(); if(!v) return;
     var s = shopState(); if(allItems(s).indexOf(v) >= 0){ toast('清單裡已經有了'); return; }
     s.extra.push(v); save('bd:shop', s); inp.value = ''; renderShop();
   });
 
-  // ---------- 紀錄 ----------
+  // ---------- 備註 ----------
   var noteEl = document.getElementById('note'), savedEl = document.getElementById('saved'), saveTimer;
   function renderNotes(){
     refreshWeek();
+    document.getElementById('notesArt').innerHTML = art('heart', 60);
     document.getElementById('noteWeek').textContent = rangeLabel(week);
     noteEl.value = load('bd:note:'+weekKey, '');
-    var keys = [];
-    try{ for(var i=0;i<localStorage.length;i++){ var k = localStorage.key(i); if(k.indexOf('bd:note:')===0 && k !== 'bd:note:'+weekKey) keys.push(k.slice(8)); } }catch(e){}
-    keys.sort().reverse();
-    document.getElementById('prevNotes').innerHTML = keys.map(function(k){
+    document.getElementById('prevNotes').innerHTML = keysWith('bd:note:').filter(function(k){ return k !== weekKey; }).reverse().map(function(k){
       var txt = load('bd:note:'+k, ''); if(!txt.trim()) return '';
-      return '<details class="prev"><summary>之前 <span class="num">'+rangeLabel(new Date(k+'T00:00:00Z'))+'</span></summary><pre>'+esc(txt)+'</pre></details>';
+      return '<details class="prev"><summary>'+rangeLabel(fromKey(k))+'</summary><pre>'+esc(txt)+'</pre></details>';
     }).join('');
   }
   noteEl.addEventListener('input', function(){
-    savedEl.textContent = '輸入中…'; clearTimeout(saveTimer);
-    save('bd:note:'+weekKey, noteEl.value);
+    savedEl.textContent = '輸入中…'; clearTimeout(saveTimer); save('bd:note:'+weekKey, noteEl.value);
     saveTimer = setTimeout(function(){ savedEl.textContent = '已儲存'; }, 500);
   });
   document.querySelectorAll('[data-chip]').forEach(function(b){
@@ -482,77 +654,14 @@ details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px
     });
   });
 
-  // ---------- 8 週計畫 ----------
-  var PLAN = { start:'2026-11-23', weeks:8, from:49, to:52.2 };
-  // 週一起算：11/24 是週二，所以第 1 週是 11/23（週一）到 11/29
-  function planWeekOf(key){ return Math.floor((new Date(key+'T00:00:00Z') - new Date(PLAN.start+'T00:00:00Z')) / (7*864e5)) + 1; }
-  function planMonday(i){ var d = new Date(PLAN.start+'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + (i-1)*7); return d; }
-  function targetAt(i){ return Math.round((PLAN.from + (PLAN.to-PLAN.from) * i / PLAN.weeks) * 10) / 10; }
-  function weekDone(key){ var st = load('bd:week:'+key, {counts:{}}), d = 0; TASKS.forEach(function(t){ if((st.counts[t.id]||0) >= t.goal) d++; }); return d; }
-  function planHeadline(){
-    var w = planWeekOf(weekKey);
-    if(w < 1) return '8 週計畫尚未開始';
-    if(w > PLAN.weeks) return '8 週計畫已完成';
-    return '8 週計畫 · 第 ' + w + ' / ' + PLAN.weeks + ' 週 · 目標 ' + targetAt(w) + ' kg';
-  }
-  function renderPlan(){
-    refreshWeek();
-    var cur = planWeekOf(weekKey), endMon = planMonday(PLAN.weeks);
-    document.getElementById('planRange').textContent = rangeLabel(planMonday(1)).split(' – ')[0] + ' – ' + rangeLabel(endMon).split(' – ')[1];
-    document.getElementById('planWeekBadge').textContent = cur < 1 ? '尚未開始' : cur > PLAN.weeks ? '已完成' : '第 ' + cur + ' / ' + PLAN.weeks + ' 週';
-    var latest = null;
-    for(var i=1;i<=PLAN.weeks;i++){ var v = load('bd:wt:'+iso(planMonday(i)), null); if(v) latest = v; }
-    var pct = latest ? Math.max(0, Math.min(1, (latest-PLAN.from)/(PLAN.to-PLAN.from))) : Math.max(0, Math.min(1, (cur-1)/PLAN.weeks));
-    document.getElementById('planBar').style.width = (pct*100).toFixed(0) + '%';
-    document.getElementById('planPace').textContent = latest
-      ? '最近一週平均 ' + latest + ' kg，已增加 ' + (Math.round((latest-PLAN.from)*10)/10) + ' kg'
-      : '每週約 +0.4 kg，填入每週平均晨重就能看到進度';
-    document.getElementById('wtInput').value = load('bd:wt:'+weekKey, '') || '';
-
-    // 圖表
-    var W = 320, H = 150, pl = 34, pr = 10, pt = 10, pb = 24, lo = 48.5, hi = 52.7;
-    function x(i){ return pl + (W-pl-pr) * i / PLAN.weeks; }
-    function y(v){ return pt + (H-pt-pb) * (hi - v) / (hi - lo); }
-    var s = '<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="目標體重與每週平均體重走勢">';
-    [49,50,51,52].forEach(function(v){ s += '<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="#EFE7DF"/><text x="'+(pl-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="10" fill="#7A6A6E" font-family="Poppins">'+v+'</text>'; });
-    for(var j=0;j<=PLAN.weeks;j++) s += '<text x="'+x(j)+'" y="'+(H-6)+'" text-anchor="middle" font-size="10" fill="#7A6A6E" font-family="Poppins">'+(j===0?'起':j)+'</text>';
-    s += '<line x1="'+x(0)+'" y1="'+y(PLAN.from)+'" x2="'+x(PLAN.weeks)+'" y2="'+y(PLAN.to)+'" stroke="#C9A9B5" stroke-width="2" stroke-dasharray="5 5"/>';
-    var pts = [[0,PLAN.from]];
-    for(var k=1;k<=PLAN.weeks;k++){ var vv = load('bd:wt:'+iso(planMonday(k)), null); if(vv) pts.push([k, Math.max(lo, Math.min(hi, vv))]); }
-    if(pts.length > 1) s += '<polyline fill="none" stroke="#6B2F45" stroke-width="2.5" stroke-linejoin="round" points="'+pts.map(function(p){return x(p[0])+','+y(p[1]);}).join(' ')+'"/>';
-    pts.forEach(function(p){ s += '<circle cx="'+x(p[0])+'" cy="'+y(p[1])+'" r="4" fill="#6B2F45" stroke="#fff" stroke-width="1.5"/>'; });
-    s += '</svg>';
-    document.getElementById('chart').innerHTML = s;
-
-    // 週列表
-    var html = '';
-    for(var n=1;n<=PLAN.weeks;n++){
-      var key = iso(planMonday(n)), done = weekDone(key), wt = load('bd:wt:'+key, null), isCur = n === cur, past = n < cur;
-      var dots = '';
-      for(var m=0;m<3;m++) dots += '<i style="width:10px;height:10px;border-radius:50%;background:'+(m<done?'#6B2F45':'#EFE7DF')+'"></i>';
-      html += '<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:18px;background:'+(isCur?'var(--cream)':'#fff')+';box-shadow:0 4px 14px rgba(43,30,34,.05);opacity:'+(n>cur?.65:1)+'">' +
-        '<span class="num" style="width:34px;height:34px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;background:'+(isCur?'#6B2F45':'var(--bg)')+';color:'+(isCur?'#fff':'var(--ink)')+'">'+n+'</span>' +
-        '<span style="flex:1;display:flex;flex-direction:column;gap:2px"><b style="font-size:14px">'+rangeLabel(planMonday(n))+(isCur?' · 本週':'')+'</b><span class="sub">目標 '+targetAt(n)+' kg'+(wt?' · 實際 '+wt+' kg':'')+'</span></span>' +
-        '<span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span style="display:flex;gap:4px">'+dots+'</span><span class="sub" style="font-size:11px">'+(past||isCur? '達成 '+done+' / 3':'')+'</span></span>' +
-        '</div>';
-    }
-    document.getElementById('weekList').innerHTML = html;
-    document.getElementById('planNote').innerHTML = '你提供的圖表是 9～10 週到 2/1，每週約 +0.3～0.35 kg。<br>壓縮成 8 週約每週 +0.4 kg，若體脂上升太快可放慢，延長到 2/1 也沒關係。';
-  }
-  document.getElementById('wtInput').addEventListener('change', function(e){
-    var v = parseFloat(e.target.value);
-    if(isNaN(v)){ try{ localStorage.removeItem('bd:wt:'+weekKey); }catch(_){} delete mem['bd:wt:'+weekKey]; }
-    else save('bd:wt:'+weekKey, Math.round(v*10)/10);
-    renderPlan(); toast('已記下本週平均');
-  });
-
   // ---------- 路由 ----------
+  var VIEWS = { home:renderHome, next:renderNext, plan:renderPlan, history:renderHistory, shop:renderShop, notes:renderNotes };
   function route(){
-    var V = ['home','shop','notes','plan'];
-    var v = (location.hash || '#home').slice(1); if(V.indexOf(v) < 0) v = 'home';
-    V.forEach(function(x){ document.getElementById('v-'+x).hidden = x !== v; });
-    if(v==='home') renderHome(); else if(v==='shop') renderShop(); else if(v==='plan') renderPlan(); else renderNotes();
-    window.scrollTo(0,0);
+    var v = (location.hash || '#home').slice(1); if(!VIEWS[v]) v = 'home';
+    Object.keys(VIEWS).forEach(function(x){ document.getElementById('v-'+x).hidden = x !== v; });
+    var tab = v === 'next' ? 'home' : v;
+    document.querySelectorAll('.tab').forEach(function(t){ if(t.dataset.tab === tab) t.setAttribute('aria-current','page'); else t.removeAttribute('aria-current'); });
+    VIEWS[v](); window.scrollTo(0, 0);
   }
   window.addEventListener('hashchange', route);
   document.addEventListener('visibilitychange', function(){ if(!document.hidden){ var k = weekKey; refreshWeek(); if(k !== weekKey) route(); } });
