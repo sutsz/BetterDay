@@ -55,8 +55,8 @@ h2{margin:0;font-size:18px;line-height:1.3;font-family:Huninn,sans-serif;font-we
 .cell{width:50px;height:50px;position:relative}
 .cell svg{display:block;width:50px;height:50px}
 .cell .plus{position:absolute;right:-2px;top:-2px;width:18px;height:18px;border-radius:50%;background:var(--brown);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--card)}
-.cell.pop svg{animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
-@keyframes pop{0%{transform:scale(.2) rotate(-30deg);opacity:0}100%{transform:scale(1) rotate(var(--r,0deg));opacity:1}}
+.cell.pop img{animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{0%{transform:scale(.2) rotate(-30deg);opacity:0}100%{transform:scale(1);opacity:1}}
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:5;background:rgba(255,252,246,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 -4px 16px rgba(90,58,34,.06);padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
 .tabs-in{max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
 .tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;min-height:52px;text-decoration:none;color:var(--muted);font-size:11.5px;font-weight:700;border-radius:14px}
@@ -87,8 +87,8 @@ details.prev{border-radius:18px;background:var(--card)}
 details.prev summary{min-height:52px;padding:0 18px;display:flex;align-items:center;font-size:15px;font-weight:700;cursor:pointer;list-style:none}
 details.prev summary::-webkit-details-marker{display:none}
 details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px;line-height:1.8;color:var(--muted);white-space:pre-wrap}
-.picker{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
-.pick{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border-radius:16px;border:2px solid transparent;background:var(--bg);cursor:pointer;font-size:11px;color:var(--muted)}
+.picker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.pick{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;border-radius:16px;border:2px solid transparent;background:var(--bg);cursor:pointer;font-size:11px;color:var(--muted)}
 .pick input{position:absolute;opacity:0;pointer-events:none}
 .pick:has(input:checked){border-color:var(--brown);background:var(--butter);color:var(--brown-ink)}
 .pick:has(input:focus-visible){outline:2px solid var(--brown)}
@@ -104,18 +104,6 @@ details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <defs>
-    <filter id="wob" x="-8%" y="-8%" width="116%" height="116%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="4" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-    <clipPath id="bodyClip"><path d="M56 8C62 9 70 20 76 32C83 45 86 57 80 69C74 81 60 94 47 93C36 92 24 83 19 70C14 58 18 46 26 35C35 22 48 7 56 8Z"/></clipPath>
-    <radialGradient id="gFlesh" cx="40%" cy="28%" r="72%"><stop offset="0" stop-color="#FDE59A"/><stop offset=".6" stop-color="#F8CB4E"/><stop offset="1" stop-color="#EFB13A"/></radialGradient>
-    <radialGradient id="gSkin" cx="35%" cy="45%" r="75%"><stop offset="0" stop-color="#D88C55"/><stop offset=".7" stop-color="#BF6E3A"/><stop offset="1" stop-color="#A35A2D"/></radialGradient>
-  </defs>
-</svg>
-
 <main class="app">
 
 <!-- ===== 本週 ===== -->
@@ -310,79 +298,14 @@ details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px
   function refreshWeek(){ week = mondayOf(taipeiNow()); weekKey = iso(week); nextKey = iso(addDays(week, 7)); }
   refreshWeek();
 
-  // ---------- 地瓜插畫 ----------
-  var LINE = '#5A3A22';
-  // 地瓜：直立的水滴形，上尖下圓，上半黃肉、下半帶紋路的皮
-  var BODY = 'M56 8C62 9 70 20 76 32C83 45 86 57 80 69C74 81 60 94 47 93C36 92 24 83 19 70C14 58 18 46 26 35C35 22 48 7 56 8Z';
-  var FLESH = 'M0 0H100V52C88 56 72 52 58 57C44 62 28 58 0 61Z';
-  var FACES = {
-    smile: '<circle cx="41" cy="35" r="2.8" fill="'+LINE+'"/><circle cx="59" cy="35" r="2.8" fill="'+LINE+'"/><path d="M44 41q6 6 12 0" fill="none" stroke="'+LINE+'" stroke-width="2.6" stroke-linecap="round"/>',
-    happy: '<path d="M37 36q4-4.5 8 0M55 36q4-4.5 8 0" fill="none" stroke="'+LINE+'" stroke-width="2.6" stroke-linecap="round"/><path d="M43.5 40.5h13q-1 9-6.5 9t-6.5-9z" fill="#B5473A" stroke="'+LINE+'" stroke-width="2.2" stroke-linejoin="round"/>',
-    grit: '<path d="M36 29.5l8 3M64 29.5l-8 3" stroke="'+LINE+'" stroke-width="2.6" stroke-linecap="round"/><circle cx="42" cy="36" r="2.6" fill="'+LINE+'"/><circle cx="58" cy="36" r="2.6" fill="'+LINE+'"/><path d="M45 41.5h10q-1.5 6-5 6t-5-6z" fill="#B5473A" stroke="'+LINE+'" stroke-width="2.2" stroke-linejoin="round"/>',
-    sleep: '<path d="M37 36q4 3 8 0M55 36q4 3 8 0" fill="none" stroke="'+LINE+'" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="50" cy="43" rx="2.6" ry="2" fill="'+LINE+'"/>'
-  };
-  function potato(face){
-    return '<path d="'+BODY+'" fill="url(#gSkin)"/>' +
-      '<path d="'+FLESH+'" fill="url(#gFlesh)" clip-path="url(#bodyClip)"/>' +
-      '<path d="M17.5 59C30 62 44 63 58 58.5C68 55 76 55 83 56" fill="none" stroke="#FFF4D6" stroke-width="2" stroke-linecap="round" opacity=".9" clip-path="url(#bodyClip)"/>' +
-      '<ellipse cx="44" cy="26" rx="5" ry="8" fill="#fff" opacity=".4" transform="rotate(30 44 26)"/>' +
-      '<path d="M30 69l2 5M43 73l1 5M57 70l1.5 5M70 65l1.5 4M38 82l1 4M51 84l1 4M63 79l1.5 4" stroke="#5A2E18" stroke-width="2.6" stroke-linecap="round" opacity=".8"/>' +
-      '<ellipse cx="33.5" cy="44" rx="4.6" ry="2.7" fill="#F29A86" opacity=".8"/><ellipse cx="66.5" cy="44" rx="4.6" ry="2.7" fill="#F29A86" opacity=".8"/>' +
-      '<g transform="translate(0 2)">' + FACES[face||'smile'] + '</g>' +
-      '<path d="'+BODY+'" fill="none" stroke="'+LINE+'" stroke-width="2.8" stroke-linejoin="round"/>';
-  }
-  function sparkle(cx, cy, r){ return '<path d="M'+cx+' '+(cy-r)+'Q'+cx+' '+cy+' '+(cx+r)+' '+cy+'Q'+cx+' '+cy+' '+cx+' '+(cy+r)+'Q'+cx+' '+cy+' '+(cx-r)+' '+cy+'Q'+cx+' '+cy+' '+cx+' '+(cy-r)+'Z" fill="#F6C64A" stroke="#D99A26" stroke-width="1.4" stroke-linejoin="round"/>'; }
-  function at(tx, ty, s, inner){ return '<g transform="translate('+tx+' '+ty+') scale('+s+')">'+inner+'</g>'; }
-  var ACT = '#E58B3A';
-  var ART = {
-    bowl: at(-3,-5,.9, potato('happy')) +
-      '<path d="M70 62L95 30M75 63L99 34" stroke="#8B5A2B" stroke-width="3.2" stroke-linecap="round"/>' +
-      '<path d="M44 66h48a24 18 0 0 1-48 0z" fill="#FFFDF7" stroke="'+LINE+'" stroke-width="2.8" stroke-linejoin="round"/>' +
-      '<path d="M47 66q3.5-6 7 0q3.5-6 7 0q3.5-6 7 0q3.5-6 7 0q3.5-6 7 0q3.5-6 7 0" fill="#fff" stroke="'+LINE+'" stroke-width="2" stroke-linejoin="round"/>' +
-      '<path d="M8 22l7 4M14 12l5 7M24 6l2 8" stroke="'+ACT+'" stroke-width="3" stroke-linecap="round"/>',
-    lift: at(8,8,.84, potato('grit')) +
-      '<rect x="14" y="58.5" width="14" height="5" fill="#8A8A8A"/><rect x="72" y="58.5" width="14" height="5" fill="#8A8A8A"/>' +
-      '<rect x="3" y="47" width="12" height="28" rx="4" fill="#9C9C9C" stroke="'+LINE+'" stroke-width="2.6"/>' +
-      '<rect x="85" y="47" width="12" height="28" rx="4" fill="#9C9C9C" stroke="'+LINE+'" stroke-width="2.6"/>' +
-      '<circle cx="27" cy="61" r="6" fill="#F8CB4E" stroke="'+LINE+'" stroke-width="2.4"/><circle cx="73" cy="61" r="6" fill="#F8CB4E" stroke="'+LINE+'" stroke-width="2.4"/>' +
-      '<path d="M24 10l3 6M50 3v7M76 10l-3 6" stroke="'+ACT+'" stroke-width="3" stroke-linecap="round"/>',
-    weigh: at(9,-1,.82, potato('smile')) +
-      '<rect x="12" y="76" width="76" height="17" rx="7" fill="#F1E9DD" stroke="'+LINE+'" stroke-width="2.8"/>' +
-      '<rect x="40" y="80" width="20" height="8" rx="3" fill="#fff" stroke="'+LINE+'" stroke-width="1.8"/><path d="M45 84h10" stroke="#A65A2C" stroke-width="1.8" stroke-linecap="round"/>' +
-      sparkle(88, 18, 7) + sparkle(12, 30, 5),
-    water: at(-4,2,.9, potato('smile')) +
-      '<rect x="62" y="48" width="25" height="42" rx="9" fill="#CFE6F2" stroke="'+LINE+'" stroke-width="2.8"/>' +
-      '<rect x="67" y="40" width="15" height="10" rx="3" fill="#9CCBE2" stroke="'+LINE+'" stroke-width="2.4"/>' +
-      '<path d="M66 64h17" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/>' +
-      '<path d="M88 12q5 7 0 11q-5-4 0-11z" fill="#8EC5E8" stroke="#5E9EC4" stroke-width="1.4"/>',
-    sleep: potato('sleep') +
-      '<path d="M7 62C30 51 72 51 95 63L93 93H9Z" fill="#F7D6CF" stroke="'+LINE+'" stroke-width="2.8" stroke-linejoin="round"/>' +
-      '<path d="M22 60v31M36 57v34M50 56v35M64 56v35M78 59v32M10 73h83M10 83h83" stroke="#EBA19A" stroke-width="1.5" opacity=".8"/>' +
-      '<text x="72" y="22" font-size="15" fill="'+LINE+'" font-family="Huninn,sans-serif">z</text><text x="82" y="13" font-size="19" fill="'+LINE+'" font-family="Huninn,sans-serif">z</text>',
-    stretch: '<path d="M4 88h92l-6 8H10z" fill="#F4A99C" stroke="'+LINE+'" stroke-width="2.4" stroke-linejoin="round"/>' +
-      '<g transform="translate(50 62) scale(1.15 .78) translate(-50 -56)">' + potato('smile') + '</g>' +
-      '<path d="M6 50l8 4M4 62h9M94 50l-8 4M96 62h-9" stroke="'+ACT+'" stroke-width="3" stroke-linecap="round"/>',
-    run: potato('smile') +
-      '<path d="M17.5 31C38 24 62 24 82.5 31L82 39C62 33 38 33 18 39Z" fill="#FFFDF7" stroke="'+LINE+'" stroke-width="2.4" stroke-linejoin="round"/>' +
-      '<path d="M18 33L3 26M18 37L4 42" stroke="'+LINE+'" stroke-width="2.4" stroke-linecap="round"/>' +
-      '<path d="M90 18q3 3 0 6q-3 3 0 6M96 22q3 3 0 6" fill="none" stroke="'+ACT+'" stroke-width="2.4" stroke-linecap="round"/>',
-    heart: at(-2,-6,.94, potato('smile')) +
-      '<path d="M50 90C33 79 27 70 31 62c3.5-7 12.5-7 19 1 6.5-8 15.5-8 19-1 4 8-2 17-19 28z" fill="#F28C80" stroke="'+LINE+'" stroke-width="2.6" stroke-linejoin="round"/>' +
-      '<path d="M43 66q2-3 5-2" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>' +
-      '<path d="M86 14c-4-3-7-1-6 2 1 3 6 6 6 6s5-3 6-6c1-3-2-5-6-2z" fill="#F28C80"/>',
-    plan: at(20,10,.8, potato('smile')) +
-      '<rect x="4" y="30" width="38" height="52" rx="6" fill="#FFFDF7" stroke="'+LINE+'" stroke-width="2.6"/>' +
-      '<rect x="15" y="25" width="16" height="9" rx="3" fill="#CFC6BB" stroke="'+LINE+'" stroke-width="2"/>' +
-      '<path d="M10 47l3 3 5-6M10 62l3 3 5-6" fill="none" stroke="'+ACT+'" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>' +
-      '<path d="M23 48h13M23 63h13M10 74h26" stroke="#CDB9A3" stroke-width="2.2" stroke-linecap="round"/>',
-    star: at(8,14,.84, potato('smile')) + '<path d="M44 2q-4 4 0 8t0 8M56 0q-4 4 0 8t0 8" fill="none" stroke="'+LINE+'" stroke-width="2.4" stroke-linecap="round"/>' + sparkle(88, 30, 7) + sparkle(12, 40, 5)
-  };
-  var ICON_LABEL = { bowl:'飲食', lift:'重訓', weigh:'體重', water:'補水', sleep:'睡眠', stretch:'伸展', run:'有氧', heart:'身心', plan:'計畫', star:'其他' };
+  // ---------- 地瓜插畫（使用者提供的水彩圖，裁切後放在 stamps/） ----------
+  var ICON_LABEL = { bowl:'飲食', lift:'重訓', weigh:'體重', water:'補水', sleep:'睡眠', stretch:'伸展', run:'有氧', heart:'身心', plan:'計畫', shield:'免疫', star:'其他' };
+  function iconKey(k){ return ICON_LABEL[k] ? k : 'star'; }
   function art(key, size, label){
-    return '<svg viewBox="0 0 100 100" width="'+size+'" height="'+size+'" '+(label?'role="img" aria-label="'+esc(label)+'"':'aria-hidden="true"')+' style="display:block;overflow:visible"><g filter="url(#wob)">'+(ART[key]||ART.star)+'</g></svg>';
+    return '<img src="stamps/'+iconKey(key)+'.png" width="'+size+'" height="'+size+'" alt="'+(label?esc(label):'')+'" style="display:block">';
   }
   function stampSvg(key, label, bonus){
-    return '<svg viewBox="0 0 100 100" role="img" aria-label="'+label+'"><g filter="url(#wob)"><circle cx="50" cy="50" r="48" fill="'+(bonus?'#FBDDBF':'#FCEBC0')+'"/>' + at(8,8,.84, ART[key]||ART.star) + '</g></svg>';
+    return '<span role="img" aria-label="'+label+'" style="display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;background:'+(bonus?'#FBDDBF':'#FCEBC0')+'"><img src="stamps/'+iconKey(key)+'.png" width="44" height="44" alt=""></span>';
   }
   function emptySvg(n){ return '<svg viewBox="0 0 100 100" role="img" aria-label="第 '+n+' 格未蓋章"><circle cx="50" cy="50" r="45" fill="#F4E7D4"/><text x="50" y="59" text-anchor="middle" font-family="Huninn,sans-serif" font-size="26" fill="#80634B">'+n+'</text></svg>'; }
 
@@ -482,7 +405,7 @@ details.prev pre{margin:0;padding:0 18px 16px;font-family:inherit;font-size:14px
     }).join('') : '<p class="sub" style="text-align:center;padding:12px">下週還沒有習慣，從下面新增一個吧。</p>';
     document.getElementById('resetNext').hidden = !load('bd:habits:'+nextKey, null);
     document.getElementById('goalVal').textContent = newGoal + ' 次';
-    document.getElementById('picker').innerHTML = Object.keys(ART).map(function(k){
+    document.getElementById('picker').innerHTML = Object.keys(ICON_LABEL).map(function(k){
       return '<label class="pick"><input type="radio" name="icon" value="'+k+'"'+(k===newIcon?' checked':'')+'>'+art(k, 40)+ICON_LABEL[k]+'</label>';
     }).join('');
   }
